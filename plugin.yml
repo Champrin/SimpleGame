@@ -1,0 +1,19 @@
+name: SimpleGame
+main: xyz.champrin.simplegame.SimpleGame
+version: "1.0.0"
+api: ["1.0.8"]
+
+author: Champrin
+description: "小游戏 集合！"
+
+commands:
+  sgmap:
+    permission: SimpleGame.command.true
+    usage: "/sgmap"
+    description: "§eSimpleGame Helper"
+    aliases: []
+permissions:
+  SimpleGame.command.op:
+    default: op
+  SimpleGame.command.true:
+    default: true
