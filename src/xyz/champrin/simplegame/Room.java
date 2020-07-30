@@ -58,8 +58,8 @@ public class Room implements Listener {
                 this.GameType = new OreRace(this);
                 GameTask = new RoomSchedule(this, GameType);
                 break;
-            case "OreRace":
-                this.GameType = new OreRace(this);
+            case "OreRace_2":
+                this.GameType = new OreRace_2(this);
                 GameTask = new RoomSchedule(this, GameType);
                 break;
             case "KeepStanding":
@@ -85,11 +85,23 @@ public class Room implements Listener {
                 break;
             case "BeFast_1":
                 this.GameType = new BeFast_1(this);
-                GameTask= new RoomSchedule(this, GameType);
+                GameTask = new RoomSchedule(this, GameType);
                 break;
             case "BeFast_2":
                 this.GameType = new BeFast_2(this);
-                GameTask= new RoomSchedule(this, GameType);
+                GameTask = new RoomSchedule(this, GameType);
+                break;
+            case "BeFast_3":
+                this.GameType = new BeFast_3(this);
+                GameTask = new RoomSchedule(this, GameType);
+                break;
+            case "BeFast_4":
+                this.GameType = new BeFast_4(this);
+                GameTask = new RoomSchedule(this, GameType);
+                break;
+            case "Weeding":
+                this.GameType = new Weeding(this);
+                GameTask = new RoomSchedule(this, GameType);
                 break;
                 /*case "MakeItem":
                 this.GameType = new MakeItem(this);
@@ -107,18 +119,7 @@ public class Room implements Listener {
                 this.GameType = new WatchingFeet(this);
                 GameTask = new RoomSchedule(this, GameType);
                 break;
-            case "BeFast_3":
-                this.GameType = new BeFast_3(this);
-               GameTask= new RoomSchedule(this, GameType);
-                break;
-            case "BeFast_4":
-                this.GameType = new BeFast_4(this);
-               GameTask= new RoomSchedule(this, GameType);
-                break;
-            case "Weeding":
-                this.GameType = new Weeding(this);
-               GameTask= new RoomSchedule(this, GameType);
-                break;
+
             case "FallingRun":
                 this.GameType = new FallingRun(this);
                 GameTask= new RoomSchedule_2(this, GameType);
@@ -157,7 +158,7 @@ public class Room implements Listener {
     {
         int x = xi;
         int z = zi;
-        int y = new Random().nextInt(ya - yi + 1+ num) + yi;
+        int y = new Random().nextInt(ya - yi + 1 + num) + yi;
 
         if (zi - za != 0) {
             z = new Random().nextInt(za - zi + 1) + zi;
@@ -165,7 +166,7 @@ public class Room implements Listener {
         if (xi - xa != 0) {
             x = new Random().nextInt(xa - xi + 1) + xi;
         }
-        return new Vector3(x, y , z);
+        return new Vector3(x, y, z);
     }
 
     public void addPoint(Player player, int point) {
@@ -385,59 +386,50 @@ public class Room implements Listener {
         arenaMsg(">  §a" + p.getName() + "§f离开了房间");
     }
 
-    public void checkTool(){
+    public void checkTool() {
         switch (gameType) {
             case "OreRace":
-            case "OreRace":
+            case "OreRace_2":
             case "BeFast_1":
             case "BeFast_2":
-                for (Player player:gamePlayer){
+                for (Player player : gamePlayer) {
                     player.getInventory().setItem(0, Item.get(Item.DIAMOND_SHOVEL, 0, 1));
                     player.getInventory().setItem(1, Item.get(Item.DIAMOND_PICKAXE, 0, 1));
                     player.getInventory().setItem(2, Item.get(Item.DIAMOND_AXE, 0, 1));
                     player.getInventory().setItem(3, Item.get(Item.DIAMOND_SWORD, 0, 1));
                 }
+                break;
             case "SnowballWar":
             case "SnowballWar_2":
-                for (Player player:gamePlayer){
+            case "Weeding":
+                for (Player player : gamePlayer) {
                     player.getInventory().setItem(0, Item.get(Item.DIAMOND_SHOVEL, 0, 1));
                 }
-            /*case "MakeItem":
-                this.GameType = new MakeItem(this);
-               GameTask= new RoomSchedule(this, GameType);
-                break;
-            case "CollectOre":
-                this.GameType = new CollectOre(this);
-               GameTask= new RoomSchedule(this, GameType);
-                break;
-            case "CollectOre_2":
-                this.GameType = new CollectOre_2(this);
-               GameTask= new RoomSchedule(this, GameType);
                 break;
             case "BeFast_3":
-                this.GameType = new BeFast_3(this);
-               GameTask= new RoomSchedule(this, GameType);
+                for (Player player : gamePlayer) {
+                    player.getInventory().setItem(0, Item.get(20, 0, 64));
+                    player.getInventory().setItem(1, Item.get(20, 0, 64));
+                    player.getInventory().setItem(2, Item.get(20, 0, 64));
+                }
                 break;
             case "BeFast_4":
-                this.GameType = new BeFast_4(this);
-               GameTask= new RoomSchedule(this, GameType);
+                for (Player player : gamePlayer) {
+                    player.getInventory().setItem(0, Item.get(Item.STONE_PICKAXE, 0, 1));
+                    player.getInventory().setItem(1, Item.get(Item.IRON_PICKAXE, 0, 1));
+                    player.getInventory().setItem(2, Item.get(Item.GOLD_PICKAXE, 0, 1));
+                    player.getInventory().setItem(3, Item.get(Item.DIAMOND_PICKAXE, 0, 1));
+                }
                 break;
-            case "Weeding":
-                this.GameType = new Weeding(this);
-               GameTask= new RoomSchedule(this, GameType);
-                break;
+            /*
+            case "MakeItem":
+            case "CollectOre":
+            case "CollectOre_2":
+
             case "FallingRun":
-                this.GameType = new FallingRun(this);
-                GameTask= new RoomSchedule_2(this, GameType);
-                break;
             case "TrafficLight":
-                this.GameType = new TrafficLight(this);
-                GameTask= new RoomSchedule_2(this, GameType);
-                break;
             case "RedAlert":
-                this.GameType = new RedAlert(this);
-                GameTask= new RoomSchedule_2(this, GameType);
-                break;*/
+            */
         }
     }
 
@@ -447,8 +439,8 @@ public class Room implements Listener {
             p.getInventory().clearAll();
             p.setGamemode(0);
             gamePlayer.add(p);
-            playerNameTag.put(p.getName(),p.getNameTag());
-            p.setNameTag("[PLAYER] §f"+p.getName());
+            playerNameTag.put(p.getName(), p.getNameTag());
+            p.setNameTag("[PLAYER] §f" + p.getName());
         }
         waitPlayer.clear();
         checkTool();

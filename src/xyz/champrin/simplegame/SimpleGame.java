@@ -61,14 +61,14 @@ public class SimpleGame extends PluginBase implements Listener {
         GameMap.put(7, "BeFast_2");
         GameMap.put(8, "Parkour");
         GameMap.put(9, "MineRun");
+        GameMap.put(14,"BeFast_3");
+        GameMap.put(15,"BeFast_4");
+        GameMap.put(16,"Weeding");
         /*TODO
         GameMap.put(10,"CollectOre");
         GameMap.put(11,"CollectOre_2");
         GameMap.put(12,"OreRace");
         GameMap.put(13,"WatchingFeet");
-        GameMap.put(14,"BeFast_3");
-        GameMap.put(15,"BeFast_4");
-        GameMap.put(16,"Weeding");
         GameMap.put(17,"FallingRun");
         GameMap.put(18,"TrafficLight");
         GameMap.put(19,"RedAlert");
@@ -226,14 +226,12 @@ public class SimpleGame extends PluginBase implements Listener {
         return this.roomInformation.containsKey(roomName);
     }
 
-    @EventHandler
-    @SuppressWarnings("unused")
+    @EventHandler @SuppressWarnings("unused")
     public void onJoin(PlayerJoinEvent event) {
         setters.remove(event.getPlayer().getName());
     }
 
-    @EventHandler
-    @SuppressWarnings("unused")
+    @EventHandler @SuppressWarnings("unused")
     public void onChat(PlayerChatEvent event) {
         Player p = event.getPlayer();
         if (getPlayerRoom(p) == null) return;
@@ -419,8 +417,7 @@ public class SimpleGame extends PluginBase implements Listener {
         player.showFormWindow(form, GameMenuId);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    @SuppressWarnings("unused")
+    @EventHandler(priority = EventPriority.MONITOR) @SuppressWarnings("unused")
     public void onFormResponse(PlayerFormRespondedEvent event) {
         Player p = event.getPlayer();
         if (GameMenuId == event.getFormID()) {
