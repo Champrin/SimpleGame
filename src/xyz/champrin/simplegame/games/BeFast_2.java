@@ -66,16 +66,16 @@ public class BeFast_2 extends Games implements Listener {
                 }
             }
         }
-        for (int i = 0; i <= v / 4; i++) {
+        for (int i = 0; i <= v / 5; i++) {
             level.setBlock(room.getRandPos(13), Block.get(12, 0));//沙子
         }
-        for (int i = 0; i <= v / 4; i++) {
+        for (int i = 0; i <= v / 5; i++) {
             level.setBlock(room.getRandPos(13), Block.get(17, 0));//木头
         }
-        for (int i = 0; i <= v / 4; i++) {
+        for (int i = 0; i <= v / 5; i++) {
             level.setBlock(room.getRandPos(13), Block.get(3, 0));//泥土
         }
-        for (int i = 0; i <= v / 4; i++) {
+        for (int i = 0; i <= v / 5; i++) {
             level.setBlock(room.getRandPos(13), Block.get(18, 0));//叶子
         }
         finishBuild();

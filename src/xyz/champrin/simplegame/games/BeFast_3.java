@@ -29,7 +29,7 @@ public class BeFast_3 extends Games implements Listener {
             Player player = event.getPlayer();
             if (room.gamePlayer.contains(player)) {
                 Block block = event.getBlock();
-                if (block.getId() != Block.STONE) {
+                if (block.getId() != Block.GLASS) {
                     event.setCancelled(true);
                     return;
                 }

@@ -52,10 +52,10 @@ public class BeFast_4 extends Games implements Listener {
         for (int i = 0; i <= v / 4; i++) {
             level.setBlock(room.getRandPos(13), Block.get(14, 0));//GOLD
         }
-        for (int i = 0; i <= v / 6; i++) {
+        for (int i = 0; i <= v / 8; i++) {
             level.setBlock(room.getRandPos(13), Block.get(15, 0));//IRON
         }
-        for (int i = 0; i <= v / 8; i++) {
+        for (int i = 0; i <= v / 12; i++) {
             level.setBlock(room.getRandPos(13), Block.get(56, 0));//钻石
         }
         finishBuild();
