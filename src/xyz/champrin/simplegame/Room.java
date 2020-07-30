@@ -1,7 +1,6 @@
 package xyz.champrin.simplegame;
 
 import cn.nukkit.Player;
-import cn.nukkit.block.Block;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
@@ -43,7 +42,7 @@ public class Room implements Listener {
     public LinkedHashMap<String, String> playerNameTag = new LinkedHashMap<>();
     public Vector3 WaitPos, ViewPos, LeavePos;
 
-    public ArrayList<String> BreakGame = new ArrayList<>(Arrays.asList("OreRace", "OreRace_2", "SnowballWar", "SnowballWar_2", "BeFast_1", "BeFast_2", "BeFast_4", "Weeding"));
+    public ArrayList<String> BreakGame = new ArrayList<>(Arrays.asList("OreRace", "OreRace", "SnowballWar", "SnowballWar_2", "BeFast_1", "BeFast_2", "BeFast_4", "Weeding"));
     public ArrayList<String> PlaceGame = new ArrayList<>(Arrays.asList("BeFast_3", "KeepStanding_2", "SnowballWar"));
     public ArrayList<String> DamageGame = new ArrayList<>(Arrays.asList("KeepStanding", "KeepStanding_2", "SnowballWar", "FallingRun"));
 
@@ -53,14 +52,14 @@ public class Room implements Listener {
         this.data = plugin.roomInformation.get(roomId);
 
         this.level = plugin.getServer().getLevelByName((String) data.get("room_world"));
-        this.gameType = (String) data.get("GameMap");
+        this.gameType = (String) data.get("gameName");
         switch (gameType) {
             case "OreRace":
                 this.GameType = new OreRace(this);
                 GameTask = new RoomSchedule(this, GameType);
                 break;
-            case "OreRace_2":
-                this.GameType = new OreRace_2(this);
+            case "OreRace":
+                this.GameType = new OreRace(this);
                 GameTask = new RoomSchedule(this, GameType);
                 break;
             case "KeepStanding":
@@ -389,7 +388,7 @@ public class Room implements Listener {
     public void checkTool(){
         switch (gameType) {
             case "OreRace":
-            case "OreRace_2":
+            case "OreRace":
             case "BeFast_1":
             case "BeFast_2":
                 for (Player player:gamePlayer){
@@ -452,6 +451,7 @@ public class Room implements Listener {
             p.setNameTag("[PLAYER] §f"+p.getName());
         }
         waitPlayer.clear();
+        checkTool();
         this.game = 1;
         this.plugin.freeRooms.remove(this);
     }
@@ -542,7 +542,7 @@ public class Room implements Listener {
         this.joinGamePlayer = 0;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onTouch(PlayerInteractEvent event) {
         if (getPlayerMode(event.getPlayer()) != null) {
             Player player = event.getPlayer();
@@ -557,14 +557,14 @@ public class Room implements Listener {
     /**
      * 玩家退出类事件
      **/
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent event) {
         if (getPlayerMode(event.getPlayer()) != null) {
             leaveRoom(event.getPlayer());
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onKick(PlayerKickEvent event) {
         if (getPlayerMode(event.getPlayer()) != null) {
             leaveRoom(event.getPlayer());

@@ -64,7 +64,7 @@ public class SimpleGame extends PluginBase implements Listener {
         /*TODO
         GameMap.put(10,"CollectOre");
         GameMap.put(11,"CollectOre_2");
-        GameMap.put(12,"OreRace_2");
+        GameMap.put(12,"OreRace");
         GameMap.put(13,"WatchingFeet");
         GameMap.put(14,"BeFast_3");
         GameMap.put(15,"BeFast_4");
@@ -361,11 +361,10 @@ public class SimpleGame extends PluginBase implements Listener {
                         a.set("state", false);
                         a.set("room_world", null);
                         a.set("gameTime", 120);
-                        a.set("gameName", null);
                         a.set("startTime", 30);
                         a.set("maxPlayers", 5);
                         a.set("minPlayers", 5);
-                        a.set("GameMap", GameMap.get(Integer.parseInt(args[2])));
+                        a.set("gameName", GameMap.get(Integer.parseInt(args[2])));
                         a.save();
                         roomInformation.put(args[1], (LinkedHashMap<String, Object>) a.getAll());
                         sender.sendMessage(">  房间" + args[1] + "成功创建");
