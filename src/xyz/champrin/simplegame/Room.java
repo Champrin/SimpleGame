@@ -408,9 +408,9 @@ public class Room implements Listener {
                 break;
             case "BeFast_3":
                 for (Player player : gamePlayer) {
-                    player.getInventory().setItem(0, Item.get(20, 0, 64));
-                    player.getInventory().setItem(1, Item.get(20, 0, 64));
-                    player.getInventory().setItem(2, Item.get(20, 0, 64));
+                    player.getInventory().setItem(0, Item.get(Item.GLASS, 0, 64));
+                    player.getInventory().setItem(1, Item.get(Item.GLASS, 0, 64));
+                    player.getInventory().setItem(2, Item.get(Item.GLASS, 0, 64));
                 }
                 break;
             case "BeFast_4":
