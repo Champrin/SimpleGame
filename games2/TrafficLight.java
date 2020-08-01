@@ -8,6 +8,7 @@ import cn.nukkit.event.player.PlayerItemHeldEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
+import cn.nukkit.math.Vector3;
 import xyz.champrin.simplegame.Room;
 
 import java.util.Random;
@@ -104,5 +105,15 @@ public class TrafficLight extends Games {
                 p.getInventory().setItem(i, item);
             }
         }
+    }
+
+    public void madeArena() {
+        Level level = room.level;
+        for (int x = room.xi; x <= room.xa; x++) {
+            for (int z = room.zi; z <= room.za; z++) {
+                level.setBlock(new Vector3(x, room.yi, z), Block.get(Block.IRON_BLOCK, 0));
+            }
+        }
+        finishBuild();
     }
 }
