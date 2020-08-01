@@ -64,14 +64,15 @@ public class SimpleGame extends PluginBase implements Listener {
         GameMap.put(14,"BeFast_3");
         GameMap.put(15,"BeFast_4");
         GameMap.put(16,"Weeding");
+        GameMap.put(18,"TrafficLight");
+        GameMap.put(19,"RedAlert");
+
         /*TODO
         GameMap.put(10,"CollectOre");
         GameMap.put(11,"CollectOre_2");
         GameMap.put(12,"OreRace");
         GameMap.put(13,"WatchingFeet");
         GameMap.put(17,"FallingRun");
-        GameMap.put(18,"TrafficLight");
-        GameMap.put(19,"RedAlert");
         GameMap.put(20,"MakeItem");
         */
         instance = this;
@@ -147,7 +148,7 @@ public class SimpleGame extends PluginBase implements Listener {
         //给每个房间结算结果
         if (!this.rooms.isEmpty()) {
             for (Map.Entry<String, Room> map : rooms.entrySet()) {
-                map.getValue().severStop();
+                map.getValue().serverStop();
             }
         }
     }

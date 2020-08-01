@@ -16,7 +16,10 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.scheduler.Task;
 import xyz.champrin.simplegame.games.*;
+import xyz.champrin.simplegame.games2.RedAlert;
+import xyz.champrin.simplegame.games2.TrafficLight;
 import xyz.champrin.simplegame.schedule.RoomSchedule;
+import xyz.champrin.simplegame.schedule.RoomSchedule_2;
 
 import java.util.*;
 
@@ -103,6 +106,15 @@ public class Room implements Listener {
                 this.GameType = new Weeding(this);
                 GameTask = new RoomSchedule(this, GameType);
                 break;
+            case "TrafficLight":
+                this.GameType = new TrafficLight(this);
+                GameTask= new RoomSchedule_2(this, (xyz.champrin.simplegame.games2.Games) GameType);
+                break;
+            case "RedAlert":
+                this.GameType = new RedAlert(this);
+                GameTask= new RoomSchedule_2(this, (xyz.champrin.simplegame.games2.Games) GameType);
+                break;
+
                 /*case "MakeItem":
                 this.GameType = new MakeItem(this);
                GameTask= new RoomSchedule(this, GameType);
@@ -124,14 +136,7 @@ public class Room implements Listener {
                 this.GameType = new FallingRun(this);
                 GameTask= new RoomSchedule_2(this, GameType);
                 break;
-            case "TrafficLight":
-                this.GameType = new TrafficLight(this);
-                GameTask= new RoomSchedule_2(this, GameType);
-                break;
-            case "RedAlert":
-                this.GameType = new RedAlert(this);
-                GameTask= new RoomSchedule_2(this, GameType);
-                break;*/
+            */
         }
         this.plugin.getServer().getScheduler().scheduleRepeatingTask(GameTask, 20);
 
@@ -423,12 +428,6 @@ public class Room implements Listener {
                 break;
             /*
             case "MakeItem":
-            case "CollectOre":
-            case "CollectOre_2":
-
-            case "FallingRun":
-            case "TrafficLight":
-            case "RedAlert":
             */
         }
     }
@@ -456,6 +455,7 @@ public class Room implements Listener {
         }
         unsetAllPlayers();
         this.game = 0;
+        this.rank.clear();
         this.plugin.freeRooms.add(this);
     }
 
@@ -480,7 +480,7 @@ public class Room implements Listener {
         }
     }
 
-    public void severStop() {
+    public void serverStop() {
         for (Player p : gamePlayer) {
             p.setHealth(20);
             p.getFoodData().sendFoodLevel(20);
@@ -508,10 +508,6 @@ public class Room implements Listener {
             loadBag(p);
             p.setNameTag(playerNameTag.get(p.getName()));
         }
-        this.gamePlayer.clear();
-        this.waitPlayer.clear();
-        this.viewPlayer.clear();
-        this.joinGamePlayer = 0;
     }
 
     public void unsetAllPlayers() {
