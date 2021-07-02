@@ -10,6 +10,7 @@ import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
+import cn.nukkit.item.Item;
 import net.createlight.champrin.simplegame.Room;
 
 import java.util.ArrayList;
@@ -20,9 +21,14 @@ public class BeFast_3 extends Games implements Listener {
 
     public BeFast_3(Room room) {
         super(room);
+        this.tools = new Item[3];
+        tools[0] = Item.get(Item.GLASS, 0, 64);
+        tools[1] = Item.get(Item.GLASS, 0, 64);
+        tools[2] = Item.get(Item.GLASS, 0, 64);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onPlace(BlockPlaceEvent event) {
         if (room.gameType.equals("BeFast_3")) {
             Player player = event.getPlayer();
@@ -38,6 +44,7 @@ public class BeFast_3 extends Games implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onMove(PlayerMoveEvent event) {
         if (room.gameType.equals("BeFast_3")) {
             Player player = event.getPlayer();
@@ -54,6 +61,7 @@ public class BeFast_3 extends Games implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onDamage(EntityDamageEvent event) {
         if (room.gameType.equals("BeFast_3")) {
             Entity player = event.getEntity();
@@ -74,6 +82,7 @@ public class BeFast_3 extends Games implements Listener {
         }
     }
 
+    @Override
     public void madeArena() {
         for (Block block : blockPlace) {
             block.level.setBlock(block, Block.get(0, 0));

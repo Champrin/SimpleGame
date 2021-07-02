@@ -6,6 +6,7 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerMoveEvent;
+import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
 import net.createlight.champrin.simplegame.Room;
 
@@ -16,7 +17,7 @@ public class WatchingFeet extends Games implements Listener {
         super(room);
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @EventHandler(priority = EventPriority.MONITOR) @SuppressWarnings("unused")
     public void onMove(PlayerMoveEvent event) {
         if (room.gameType.equals("WatchingFeet")) {
             Player player = event.getPlayer();
@@ -38,4 +39,14 @@ public class WatchingFeet extends Games implements Listener {
         }
     }
 
+    @Override
+    public void madeArena() {
+        Level level = room.level;
+        for (int x = room.xi; x <= room.xa; x++) {
+            for (int z = room.zi; z <= room.za; z++) {
+                level.setBlock(new Vector3(x, room.yi, z), Block.get(Block.SANDSTONE, 0));
+            }
+        }
+        finishBuild();
+    }
 }

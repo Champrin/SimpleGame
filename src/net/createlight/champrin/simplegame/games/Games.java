@@ -2,11 +2,14 @@ package net.createlight.champrin.simplegame.games;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
+import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Config;
 import net.createlight.champrin.simplegame.SimpleGame;
 import net.createlight.champrin.simplegame.Room;
+
+import java.io.File;
 
 public abstract class Games {
 
@@ -14,8 +17,20 @@ public abstract class Games {
 
     public Room room;
 
+    public Item[] tools;
+
     public Games(Room room) {
         this.room = room;
+    }
+
+    public void giveTools() {
+        if (tools == null) return;
+        if (room.gamePlayer.size() == 0) return;
+        for (Player player : room.gamePlayer) {
+            for (Item item : tools) {
+                player.getInventory().addItem(item);
+            }
+        }
     }
 
     public void madeArena() {
@@ -29,6 +44,8 @@ public abstract class Games {
     }
 
     public void finishBuild() {
+        File file = new File(this.plugin.getDataFolder() + "/Room/" + room.roomId + ".yml");
+        if (!file.exists()) return;
         Config c = plugin.getRoomConfig(room.roomId);
         c.set("arena", true);
         c.save();
@@ -36,6 +53,8 @@ public abstract class Games {
     }
 
     public void useBuild() {
+        File file = new File(this.plugin.getDataFolder() + "/Room/" + room.roomId + ".yml");
+        if (!file.exists()) return;
         Config c = plugin.getRoomConfig(room.roomId);
         c.set("arena", false);
         c.save();

@@ -28,12 +28,37 @@ public class SimpleGame extends PluginBase implements Listener {
     public String COMMAND_NAME = "sgmap";
     public String PLUGIN_NAME = "SimpleGame";
     public String PLUGIN_No = "3";
-    public String PREFIX = "§a§l==> §c小游戏§a <==§r";
     public String GAME_NAME = "小游戏";
+    public String PREFIX = "§a§l==> §c" + GAME_NAME + "§a <==§r";
 
     public int GameMenuId = 100002;
 
-    public LinkedHashMap<Integer, String> GameMap = new LinkedHashMap<>();
+    public LinkedHashMap<Integer, String> GameMap = new LinkedHashMap<Integer, String>() {{
+        put(1, "BeFast_1");
+        put(2, "BeFast_2");
+        put(3, "BeFast_3");
+        put(4, "BeFast_4");
+        //put(5, "HuntingDiamond");
+        put(6, "KeepStanding");
+        put(7, "KeepStanding_2");
+        //put(8, "MakeItem");
+        put(9, "MineRun");
+        put(10, "OreRace");
+        //put(11, "OreRace_2");
+        put(12, "Parkour");
+        put(13, "SnowballWar");
+        put(14, "SnowballWar_2");
+        put(15, "Weeding");
+
+        //put(16, "AvoidPoison");
+        //put(17, "CollectOre");
+        put(18, "FallingRun");
+        put(19, "HelpHen");
+        put(20, "RedAlert");
+        //put(21, "SnowSlide");
+        put(22, "TrafficLight");
+        put(23, "WatchingFeet");
+    }};
 
     public LinkedHashMap<String, LinkedHashMap<String, Object>> roomInformation = new LinkedHashMap<>();//房间基本信息
     public LinkedHashMap<String, Room> rooms = new LinkedHashMap<>();//开启的房间信息
@@ -51,43 +76,7 @@ public class SimpleGame extends PluginBase implements Listener {
 
     @Override
     public void onLoad() {
-        GameMap.put(1, "OreRace");
-        GameMap.put(2, "BeFast_1");
-        GameMap.put(3, "KeepStanding");
-        GameMap.put(4, "KeepStanding_2");
-        GameMap.put(5, "SnowballWar");
-        GameMap.put(6, "SnowballWar_2");
-        GameMap.put(7, "BeFast_2");
-        GameMap.put(8, "Parkour");
-        GameMap.put(9, "MineRun");
-        GameMap.put(10, "BeFast_3");
-        GameMap.put(11, "BeFast_4");
-        GameMap.put(12, "Weeding");
-        GameMap.put(13, "TrafficLight");
-        GameMap.put(14, "RedAlert");
-        GameMap.put(15, "WatchingFeet");
-        GameMap.put(16, "FallingRun");
-        /*
-        GameMap.put(10,"CollectOre");
-        GameMap.put(11,"CollectOre_2");
-        GameMap.put(12,"OreRace_2");
-        GameMap.put(20,"MakeItem");
-        */
         instance = this;
-    }
-
-    public String getAllGameNameType() {
-        String allGameNameType = "";
-        int i = 0;
-        for (Map.Entry<Integer, String> map : GameMap.entrySet()) {
-            allGameNameType = allGameNameType + "[" + map.getKey() + "]" + map.getValue() + ",";
-            i = i + 1;
-            if (i == 3) {
-                i = 0;
-                allGameNameType = allGameNameType + "\n";
-            }
-        }
-        return allGameNameType;
     }
 
     @Override
@@ -115,16 +104,6 @@ public class SimpleGame extends PluginBase implements Listener {
         this.OwnPoint = (int) this.config.get("占领加分");
         this.TeamPoint = (int) this.config.get("团队加分");
         this.WinPoint = (int) this.config.get("最终胜利加分");
-    }
-
-    public void setRoomData(String roomId) {
-        Room game = new Room(roomId, this);
-        this.rooms.put(roomId, game);
-        this.freeRooms.add(game);
-        this.getServer().getPluginManager().registerEvents(game, this);
-        if (!((Boolean) game.data.get("arena"))) {
-            game.GameType.madeArena();
-        }
     }
 
     public String getGameName() {
@@ -207,17 +186,26 @@ public class SimpleGame extends PluginBase implements Listener {
                 if (FILE.isFile()) {
                     Config room = new Config(FILE, Config.YAML);
                     String FileName = FILE.getName().substring(0, FILE.getName().lastIndexOf("."));
-                    this.roomInformation.put(FileName, new LinkedHashMap<>(room.getAll()));
-                    if ((Boolean) room.get("state")) {
-                        this.setRoomData(FileName);
-                        this.getLogger().info("   房间§b" + FileName + "§r加载完成");
-                    }
+                    this.setRoomData(room, FileName);
                 }
             }
         }
         this.getLogger().info("-房间信息加载完毕...");
     }
 
+    public void setRoomData(Config room, String FileName) {
+        this.roomInformation.put(FileName, new LinkedHashMap<>(room.getAll()));
+        if ((Boolean) room.get("state")) {
+            Room game = new Room(FileName, this);
+            this.rooms.put(FileName, game);
+            this.freeRooms.add(game);
+            this.getServer().getPluginManager().registerEvents(game, this);
+            if (!((Boolean) game.data.get("arena"))) {
+                game.GameType.madeArena();
+            }
+            this.getLogger().info("   房间§b" + FileName + "§r加载完成");
+        }
+    }
 
     public Config getRoomConfig(String roomName) {
         return new Config(this.getDataFolder() + "/Room/" + roomName + ".yml", Config.YAML);
@@ -259,56 +247,89 @@ public class SimpleGame extends PluginBase implements Listener {
             Config room = this.getRoomConfig(room_name);
 
             String xyz = Math.round(Math.floor(b.x)) + "+" + Math.round(Math.floor(b.y)) + "+" + Math.round(Math.floor(b.z));
-
-            int step = Integer.parseInt(setters.get(name).get("step"));
-
-            switch (step) {
-                case 1:
-                    room.set("wait_pos", xyz);//等待点
-                    setters.get(name).put("step", step + 1 + "");
-                    p.sendMessage("§c>  §f请设置§a区域要求点1");
-                    break;
-                case 2:
-                    room.set("pos1", xyz);
-                    setters.get(name).put("step", step + 1 + "");
-                    p.sendMessage("§c>  §f请设置§a区域要求点2");
-                    break;
-                case 3:
-                    room.set("pos2", xyz);
-                    String[] p1 = ((String) room.get("pos1")).split("\\+");
-                    room.set("center_pos",
-                            (Integer.parseInt(p1[0]) + Math.round(Math.floor(b.x))) / 2 + "+"
-                                    + (Integer.parseInt(p1[1]) + Math.round(Math.floor(b.y))) / 2 + "+"
-                                    + (Integer.parseInt(p1[2]) + Math.round(Math.floor(b.z))) / 2);
-                    room.set("room_world", b.level.getFolderName());
-                    setters.get(name).put("step", step + 1 + "");
-                    p.sendMessage("§c>  §f请设置§a观战点");
-                    break;
-                case 4:
-                    room.set("view_pos", xyz);
-                    setters.get(name).put("step", step + 1 + "");
-                    p.sendMessage("§c>  §c请设置§a离开点");
-                    break;
-                case 5:
-                    room.set("leave_pos", xyz);
-                    room.set("leave_world", b.level.getFolderName());
-                    room.set("arena", false);
-                    room.set("state", true);
-                    roomInformation.put(room_name, (LinkedHashMap<String, Object>) room.getAll());
-                    setRoomData(room_name);
-                    setters.remove(name);
-                    p.sendMessage("§a>>  §f房间设置已完成");
-                    break;
+            if (setters.get(name).containsKey("step")) {
+                int step = Integer.parseInt(setters.get(name).get("step"));
+                switch (step) {
+                    case 1:
+                        room.set("wait_pos", xyz);//等待点
+                        setters.get(name).put("step", step + 1 + "");
+                        p.sendMessage("§c>  §f请设置§a区域要求点1");
+                        break;
+                    case 2:
+                        room.set("pos1", xyz);
+                        setters.get(name).put("step", step + 1 + "");
+                        p.sendMessage("§c>  §f请设置§a区域要求点2");
+                        break;
+                    case 3:
+                        room.set("pos2", xyz);
+                        String[] p1 = ((String) room.get("pos1")).split("\\+");
+                        room.set("center_pos",
+                                (Integer.parseInt(p1[0]) + Math.round(Math.floor(b.x))) / 2 + "+"
+                                        + (Integer.parseInt(p1[1]) + Math.round(Math.floor(b.y))) / 2 + "+"
+                                        + (Integer.parseInt(p1[2]) + Math.round(Math.floor(b.z))) / 2);
+                        room.set("room_world", b.level.getFolderName());
+                        setters.get(name).put("step", step + 1 + "");
+                        p.sendMessage("§c>  §f请设置§a观战点");
+                        break;
+                    case 4:
+                        room.set("view_pos", xyz);
+                        setters.get(name).put("step", step + 1 + "");
+                        p.sendMessage("§c>  §c请设置§a离开点");
+                        break;
+                    case 5:
+                        room.set("leave_pos", xyz);
+                        room.set("leave_world", b.level.getFolderName());
+                        room.set("arena", false);
+                        room.set("state", true);
+                        setRoomData(room, room_name);
+                        setters.remove(name);
+                        p.sendMessage("§a>>  §f房间设置已完成");
+                        break;
+                }
+            } else {
+                room.set(setters.get(name).get("setc"), xyz);
+                rooms.remove(room_name);
+                roomInformation.remove(room_name);
+                setRoomData(room,room_name);
             }
             room.save();
         }
     }
 
+    public String getStringFormList(LinkedHashMap<Integer, String> MAP) {
+        String allGameNameType = "";
+        int i = 0;
+        for (Map.Entry<Integer, String> map : MAP.entrySet()) {
+            allGameNameType = allGameNameType + "[" + map.getKey() + "]" + map.getValue() + ",";
+            i = i + 1;
+            if (i == 3) {
+                i = 0;
+                allGameNameType = allGameNameType + "\n";
+            }
+        }
+        return allGameNameType;
+    }
+
     public void Op_CHelpMessage(CommandSender sender) {
-        sender.sendMessage(">  /" + COMMAND_NAME + " add [房间名] [游戏类型] ------ §d创建新房间");
-        sender.sendMessage(">  /" + COMMAND_NAME + " set [房间名] ------ §d设置房间");
-        sender.sendMessage(">  /" + COMMAND_NAME + " del [房间名] ------ §d删除房间");
-        sender.sendMessage(">  游戏类型: " + getAllGameNameType());
+        sender.sendMessage(">  /" + COMMAND_NAME + " add [房间名] [游戏类型] ------ §d创建一个新房间");
+        sender.sendMessage(">  游戏类型: " + getStringFormList(GameMap));
+        sender.sendMessage(">  /" + COMMAND_NAME + " set [房间名] ------ §d设置一个房间");
+        sender.sendMessage(">  /" + COMMAND_NAME + " del [房间名] ------ §d删除一个房间");
+        sender.sendMessage(">  /" + COMMAND_NAME + " start [房间名] ------ §d强行开始一个房间的游戏");
+        sender.sendMessage(">  /" + COMMAND_NAME + " stop [房间名] ------ §d强行停止一个房间的游戏");
+        sender.sendMessage(">  /" + COMMAND_NAME + " setc [房间名] [参数序号] *[设置值]------ §d设置一个房间的配置文件的信息");
+        sender.sendMessage(">  参数序号: " + getStringFormList(new LinkedHashMap<Integer, String>() {{
+            put(1, "gameTime");
+            put(2, "startTime");
+            put(3, "maxPlayers");
+            put(4, "minPlayers");
+            put(5, "wait_pos");
+            put(6, "pos1");
+            put(7, "pos2");
+            put(8, "view_pos");
+            put(9, "leave_pos");
+        }}));
+
     }
 
     public void CHelpMessage(CommandSender sender) {
@@ -356,6 +377,58 @@ public class SimpleGame extends PluginBase implements Listener {
                             sender.sendMessage(">  请在游戏中运行");
                         }
                         break;
+                    case "setc":
+                        if (sender instanceof Player) {
+                            if (args.length < 2) {
+                                sender.sendMessage(">  参数不足");
+                                break;
+                            }
+                            if (!this.isRoomSet(args[1])) {
+                                sender.sendMessage(">  房间不存在或未开启");
+                                break;
+                            }
+                            if (this.isRoomSet(args[1])) {
+                                Room a = this.rooms.get(args[1]);
+                                if (a.game != 0 || !a.gamePlayer.isEmpty()) {
+                                    sender.sendMessage(">  房间正在游戏中");
+                                    break;
+                                }
+                            }
+                            LinkedHashMap<Integer, String> typeMap = new LinkedHashMap<Integer, String>() {{
+                                put(1, "gameTime");
+                                put(2, "startTime");
+                                put(3, "maxPlayers");
+                                put(4, "minPlayers");
+                                put(5, "wait_pos");
+                                put(6, "pos1");
+                                put(7, "pos2");
+                                put(8, "view_pos");
+                                put(9, "leave_pos");
+                            }};
+                            int type = Integer.parseInt(args[2]);
+                            if (!typeMap.containsKey(type)) {
+                                sender.sendMessage(">  序号输入错误");
+                                break;
+                            }
+                            if (type <= 4) {
+                                Config c = getRoomConfig(args[1]);
+                                c.set(typeMap.get(type), Integer.parseInt(args[3]));
+                                c.save();
+                                rooms.remove(args[1]);
+                                roomInformation.remove(args[1]);
+                                setRoomData(c, args[1]);
+                                break;
+                            } else {
+                                LinkedHashMap<String, String> list = new LinkedHashMap<>();
+                                list.put("room_name", args[1]);
+                                list.put("setc", typeMap.get(type));
+                                setters.put(sender.getName(), list);
+                                sender.sendMessage("房间" + args[1] + "正在设置 \n§c>  §f请破坏方块设置此点");
+                            }
+                        } else {
+                            sender.sendMessage(">  请在游戏中运行");
+                        }
+                        break;
                     case "add":
                         if (args.length < 3) {
                             sender.sendMessage(">  参数不足");
@@ -399,6 +472,28 @@ public class SimpleGame extends PluginBase implements Listener {
                             sender.sendMessage(">  房间" + args[1] + "删除失败");
                         }
                         break;
+                    case "start":
+                        if (args.length < 2) {
+                            sender.sendMessage(">  参数不足");
+                            break;
+                        }
+                        if (!this.isRoomSet(args[1])) {
+                            sender.sendMessage(">  房间不存在或未开启");
+                            break;
+                        }
+                        rooms.get(args[1]).startGame();
+                        break;
+                    case "stop":
+                        if (args.length < 2) {
+                            sender.sendMessage(">  参数不足");
+                            break;
+                        }
+                        if (!this.isRoomSet(args[1])) {
+                            sender.sendMessage(">  房间不存在或未开启");
+                            break;
+                        }
+                        rooms.get(args[1]).stopGame();
+                        break;
                     case "help":
                     default:
                         this.CHelpMessage(sender);
@@ -418,7 +513,7 @@ public class SimpleGame extends PluginBase implements Listener {
         for (Room room : rooms.values()) {
             String state = "§f房间:§a" + room.roomId + "§f游戏:§a" + room.gameType;
             if (room.game == 0) {
-                state = state + "§e等待中 §a" + room.getLobbyPlayersNumber() + "§f/§a" + room.getMaxPlayers();
+                state = state + "§e等待中 §a" + room.getWaitingPlayersNumber() + "§f/§a" + room.getMaxPlayers();
             } else {
                 state = state + "§c游戏中";
             }

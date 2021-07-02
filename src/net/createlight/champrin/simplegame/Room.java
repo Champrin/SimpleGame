@@ -9,6 +9,7 @@ import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.*;
+import cn.nukkit.form.window.FormWindowSimple;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
@@ -16,13 +17,13 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.scheduler.Task;
 import net.createlight.champrin.simplegame.games.*;
-import net.createlight.champrin.simplegame.games2.FallingRun;
-import net.createlight.champrin.simplegame.games2.RedAlert;
-import net.createlight.champrin.simplegame.games2.TrafficLight;
-import net.createlight.champrin.simplegame.games2.WatchingFeet;
+import net.createlight.champrin.simplegame.games.Games;
+import net.createlight.champrin.simplegame.games2.*;
 import net.createlight.champrin.simplegame.schedule.RoomSchedule;
 import net.createlight.champrin.simplegame.schedule.RoomSchedule_2;
+import net.createlight.champrin.simplegame.schedule.RoomSchedule_3;
 
+import javax.print.attribute.standard.PageRanges;
 import java.util.*;
 
 public class Room implements Listener {
@@ -47,9 +48,9 @@ public class Room implements Listener {
     public LinkedHashMap<String, String> playerNameTag = new LinkedHashMap<>();
     public Vector3 WaitPos, ViewPos, LeavePos;
 
-    public ArrayList<String> BreakGame = new ArrayList<>(Arrays.asList("OreRace", "OreRace", "SnowballWar", "SnowballWar_2", "BeFast_1", "BeFast_2", "BeFast_4", "Weeding"));
-    public ArrayList<String> PlaceGame = new ArrayList<>(Arrays.asList("BeFast_3", "KeepStanding_2", "SnowballWar"));
-    public ArrayList<String> DamageGame = new ArrayList<>(Arrays.asList("KeepStanding", "KeepStanding_2", "SnowballWar", "FallingRun", "WatchingFeet"));
+    public ArrayList<String> BreakGame = new ArrayList<>(Arrays.asList("OreRace", "OreRace_2", "SnowballWar", "SnowballWar_2", "BeFast_1", "BeFast_2", "BeFast_4", "Weeding", "MakeItem"));
+    public ArrayList<String> PlaceGame = new ArrayList<>(Arrays.asList("BeFast_3", "SnowballWar"));
+    public ArrayList<String> DamageGame = new ArrayList<>(Arrays.asList("KeepStanding", "KeepStanding_2", "SnowballWar", "FallingRun", "WatchingFeet", "AvoidPoison"));
 
     public Room(String roomId, SimpleGame plugin) {
         this.plugin = plugin;
@@ -74,86 +75,97 @@ public class Room implements Listener {
         switch (gameType) {
             case "OreRace":
                 this.GameType = new OreRace(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             /*case "OreRace_2":
                 this.GameType = new OreRace_2(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;*/
             case "KeepStanding":
             case "KeepStanding_2":
                 this.GameType = new KeepStanding(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             case "SnowballWar":
                 this.GameType = new SnowballWar(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             case "SnowballWar_2":
                 this.GameType = new SnowballWar_2(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             case "Parkour":
                 this.GameType = new Parkour(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             case "MineRun":
                 this.GameType = new MineRun(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             case "BeFast_1":
                 this.GameType = new BeFast_1(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             case "BeFast_2":
                 this.GameType = new BeFast_2(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             case "BeFast_3":
                 this.GameType = new BeFast_3(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             case "BeFast_4":
                 this.GameType = new BeFast_4(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
             case "Weeding":
                 this.GameType = new Weeding(this);
-                GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;
-                /*case "MakeItem":
+            /*case "MakeItem":
                 this.GameType = new MakeItem(this);
-               GameTask= new RoomSchedule(this, GameType);
-                break;
-            case "CollectOre":
-                this.GameType = new CollectOre(this);
-               GameTask= new RoomSchedule(this, GameType);
-                break;
-            case "CollectOre_2":
-                this.GameType = new CollectOre_2(this);
-               GameTask= new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this, GameType);
                 break;*/
             case "WatchingFeet":
                 this.GameType = new WatchingFeet(this);
-                GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
                 break;
             case "FallingRun":
                 this.GameType = new FallingRun(this);
-                GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
                 break;
             case "TrafficLight":
                 this.GameType = new TrafficLight(this);
-                GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
                 break;
             case "RedAlert":
                 this.GameType = new RedAlert(this);
-                GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
                 break;
+            case "HelpHen":
+                this.GameType = new HelpHen(this);
+                this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                break;
+            /*case "SnowSlide":
+                this.GameType = new SnowSlide(this);
+                this.GameTask = new RoomSchedule_3(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                break;
+            case "AvoidPoison":
+                this.GameType = new AvoidPoison(this);
+                this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                break;
+            case "CollectOre":
+                this.GameType = new CollectOre(this);
+                this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                break;
+            case "HuntingDiamond":
+                this.GameType = new HuntingDiamond(this);
+                this.GameTask = new RoomSchedule_3(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                break;*/
         }
         this.plugin.getServer().getScheduler().scheduleRepeatingTask(GameTask, 20);
         assert GameType != null;//断言
         this.plugin.getServer().getPluginManager().registerEvents((Listener) GameType, this.plugin);
-
     }
 
     public Vector3 getVector3(String pos) {
@@ -163,7 +175,7 @@ public class Room implements Listener {
 
     public Vector3 getCenterPosVector3(int y) {
         String[] p1 = ((String) data.get("center_pos")).split("\\+");
-        return new Vector3(Integer.parseInt(p1[0]), Integer.parseInt(p1[1]) + y, Integer.parseInt(p1[2]));
+        return new Vector3(Integer.parseInt(p1[0]) + 0.5, Integer.parseInt(p1[1]) + y, Integer.parseInt(p1[2]) + 0.5);
     }
 
     public Vector3 getRandPos(int num)//在游戏区域内随机获取坐标
@@ -172,7 +184,7 @@ public class Room implements Listener {
         int z = zi;
         int y = yi;
         if (num != 0) {
-            y = new Random().nextInt(ya - yi + num) + yi;
+            y = new Random().nextInt(num) + yi;
         }
         if (zi - za != 0) {
             z = new Random().nextInt(za - zi + 1) + zi;
@@ -186,7 +198,6 @@ public class Room implements Listener {
     public void addPoint(Player player, int point) {
         String name = player.getName();
         rank.put(name, rank.get(name) + point);
-        rank.put(name, rank.get(name) + point);
     }
 
     public String getStatus() {
@@ -195,13 +206,13 @@ public class Room implements Listener {
         return null;
     }
 
-    public String getPlayerMode(Player p)//获取玩家当前状态
+    public String getPlayerMode(Player player)//获取玩家当前状态
     {
-        if (waitPlayer.contains(p)) {
+        if (waitPlayer.contains(player)) {
             return "wait";
-        } else if (gamePlayer.contains(p)) {
+        } else if (gamePlayer.contains(player)) {
             return "game";
-        } else if (viewPlayer.contains(p)) {
+        } else if (viewPlayer.contains(player)) {
             return "view";
         }
         return null;
@@ -221,10 +232,10 @@ public class Room implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     @SuppressWarnings("unused")
     public void onChat(PlayerChatEvent event) {
-        Player p = event.getPlayer();
-        if (getPlayerMode(p) != null) {
+        Player player = event.getPlayer();
+        if (getPlayerMode(player) != null) {
             event.setCancelled(true);
-            arenaMsg(p.getNameTag() + " §e§l>§r " + event.getMessage());
+            arenaMsg(player.getNameTag() + " §e§l>§r " + event.getMessage());
         }
     }
 
@@ -244,28 +255,27 @@ public class Room implements Listener {
         return (int) data.get("minPlayers");
     }
 
-    public int getLobbyPlayersNumber() {
+    public int getWaitingPlayersNumber() {
         return waitPlayer.size();
     }
 
     public int getRemainPlayers() {
-        return getMaxPlayers() - getLobbyPlayersNumber();
+        return getMaxPlayers() - getWaitingPlayersNumber();
     }
 
     public void arenaMsg(String msg) {
-        for (Player p : getAllPlayers()) {
-            p.sendMessage(msg);
+        for (Player player : getAllPlayers()) {
+            player.sendMessage(msg);
         }
     }
 
     public void arenaTiTle(String msg, String msg1) {
-        for (Player p : getAllPlayers()) {
-            p.sendTitle(msg, msg1, 2, 20 * 3, 2);
+        for (Player player : getAllPlayers()) {
+            player.sendTitle(msg, msg1, 2, 20 * 3, 2);
         }
     }
 
     public Map<String, Integer> sortByValue(Map<String, Integer> map) {
-
         List<Map.Entry<String, Integer>> list = new ArrayList<>(map.entrySet());
         //升序排序
         list.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
@@ -352,124 +362,86 @@ public class Room implements Listener {
         viewPlayer.add(player);
 
         player.setGamemode(3);
-        player.setHealth(20);
-        player.getFoodData().setLevel(20);
         player.getInventory().clearAll();
-        player.removeAllEffects();
+        recoverPlayer(player);
         player.getInventory().setItem(8, (Item.get(64, 0, 1)).setCustomName("§c退出游戏"));
         player.teleport(ViewPos);
         player.setSpawn(ViewPos);
         player.sendMessage(">> 你进入观战模式");
     }
 
-    public void joinToRoom(Player p) {
-        if (getPlayerMode(p) != null) {
-            p.sendMessage(">>  你已经加入一个房间了,请在聊天栏输入“@hub”重试");
+    public void joinToRoom(Player player) {
+        if (getPlayerMode(player) != null) {
+            player.sendMessage(">>  你已经加入一个房间了,请在聊天栏输入“@hub”重试");
             return;
         } else if (waitPlayer.size() >= getMaxPlayers()) {
-            p.sendMessage(">>  房间已满");
+            player.sendMessage(">>  房间已满");
             return;
         } else if (game == 1) {
-            p.sendMessage(">>  房间已开始");
+            player.sendMessage(">>  房间已开始");
             return;
         }
         Position v3 = Position.fromObject(WaitPos, plugin.getServer().getLevelByName((String) data.get("room_world")));
-        saveBag(p);
-        p.setGamemode(2);
-        p.teleport(v3);
+        saveBag(player);
+        player.setGamemode(2);
+        player.teleport(v3);
 
-        this.waitPlayer.add(p);
-        this.rank.put(p.getName(), 0);
+        this.waitPlayer.add(player);
+        this.rank.put(player.getName(), 0);
 
-        p.getInventory().setItem(8, (Item.get(64, 0, 1)).setCustomName("§c退出游戏"));
+        player.getInventory().setItem(8, (Item.get(64, 0, 1)).setCustomName("§c退出游戏"));
+        player.getInventory().setItem(0, (Item.get(64, 0, 1)).setCustomName("§a游戏介绍"));
 
-        arenaMsg(">  §a" + p.getName() + "§f加入了房间");
-        p.sendMessage("§c若想退出游戏请输入 @hub");
+        arenaMsg(">  §a" + player.getName() + "§f加入了房间");
+        player.sendMessage("§c若想退出游戏请输入 @hub");
     }
 
-    public void leaveRoom(Player p) {
-        waitPlayer.remove(p);
-        gamePlayer.remove(p);
-        viewPlayer.remove(p);
+    public void leaveRoom(Player player) {
+        waitPlayer.remove(player);
+        gamePlayer.remove(player);
+        viewPlayer.remove(player);
+        rank.remove(player.getName());
 
-        rank.remove(p.getName());
+        player.getInventory().clearAll();
+        recoverPlayer(player);
+        player.setGamemode(0);
 
-        Position v3 = Position.fromObject(LeavePos, plugin.getServer().getLevelByName((String) data.get("leave_pos")));
-        p.teleport(v3);
-        p.setSpawn(v3);
-        p.removeAllEffects();
-        this.joinGamePlayer = joinGamePlayer - 1;
-        p.getInventory().clearAll();
-        arenaMsg(">  §a" + p.getName() + "§f离开了房间");
-    }
-
-    public void checkTool() {
-        switch (gameType) {
-            case "OreRace":
-            case "OreRace_2":
-            case "BeFast_1":
-            case "BeFast_2":
-                for (Player player : gamePlayer) {
-                    player.getInventory().setItem(0, Item.get(Item.DIAMOND_SHOVEL, 0, 1));
-                    player.getInventory().setItem(1, Item.get(Item.DIAMOND_PICKAXE, 0, 1));
-                    player.getInventory().setItem(2, Item.get(Item.DIAMOND_AXE, 0, 1));
-                    player.getInventory().setItem(3, Item.get(Item.DIAMOND_SWORD, 0, 1));
-                }
-                break;
-            case "SnowballWar":
-            case "SnowballWar_2":
-            case "Weeding":
-                for (Player player : gamePlayer) {
-                    player.getInventory().setItem(0, Item.get(Item.DIAMOND_SHOVEL, 0, 1));
-                }
-                break;
-            case "BeFast_3":
-                for (Player player : gamePlayer) {
-                    player.getInventory().setItem(0, Item.get(Item.GLASS, 0, 64));
-                    player.getInventory().setItem(1, Item.get(Item.GLASS, 0, 64));
-                    player.getInventory().setItem(2, Item.get(Item.GLASS, 0, 64));
-                }
-                break;
-            case "BeFast_4":
-                for (Player player : gamePlayer) {
-                    player.getInventory().setItem(0, Item.get(Item.STONE_PICKAXE, 0, 1));
-                    player.getInventory().setItem(1, Item.get(Item.IRON_PICKAXE, 0, 1));
-                    player.getInventory().setItem(2, Item.get(Item.GOLD_PICKAXE, 0, 1));
-                    player.getInventory().setItem(3, Item.get(Item.DIAMOND_PICKAXE, 0, 1));
-                }
-                break;
-            /*
-            case "MakeItem":
-            case "CollectOre":
-            case "CollectOre_2":
-
-            case "FallingRun":
-            case "TrafficLight":
-            case "RedAlert":
-            */
+        loadBag(player);
+        if (playerNameTag.containsKey(player.getName())) {
+            player.setNameTag(playerNameTag.get(player.getName()));
         }
+        Position v3 = Position.fromObject(LeavePos, plugin.getServer().getLevelByName((String) data.get("leave_pos")));
+        player.teleport(v3);
+        player.setSpawn(v3);
+
+        this.joinGamePlayer = joinGamePlayer - 1;
+        player.getInventory().clearAll();
+        arenaMsg(">  §a" + player.getName() + "§f离开了房间");
     }
 
     public void startGame() {
         this.joinGamePlayer = waitPlayer.size();
-        for (Player p : waitPlayer) {
-            p.getInventory().clearAll();
-            p.setGamemode(0);
-            gamePlayer.add(p);
-            playerNameTag.put(p.getName(), p.getNameTag());
-            p.setNameTag("[PLAYER] §f" + p.getName());
-            p.teleport(getStartVector3());
-            p.setSpawn(getStartVector3());
+        for (Player player : waitPlayer) {
+            player.getInventory().clearAll();
+            player.setGamemode(0);
+            gamePlayer.add(player);
+            playerNameTag.put(player.getName(), player.getNameTag());
+            player.setNameTag("[PLAYER] §f" + player.getName());
+            player.teleport(getStartVector3());
+            player.setSpawn(getStartVector3());
         }
         waitPlayer.clear();
-        checkTool();
+
         this.game = 1;
         this.plugin.freeRooms.remove(this);
+        /*checkTool 检查游戏是否需要工具*/
+        GameType.giveTools();
+
         GameType.useBuild();
     }
 
 
-    public Vector3 getStartVector3() {
+    public Vector3 getStartVector3() {//TODO
         switch (gameType) {
             case "OreRace_2":
                 return getCenterPosVector3(15);
@@ -481,20 +453,21 @@ public class Room implements Listener {
             /*
             case "MakeItem":
             case "CollectOre":
-            case "CollectOre_2":
+            case "HuntingDiamond":
 
             case "FallingRun":
             case "TrafficLight":
             case "RedAlert":
             */
+            default:
+                return getCenterPosVector3(1);
         }
-        return getCenterPosVector3(1);
     }
 
     public void stopGame() {
         getRichList();
-        for (Player p : getAllPlayers()) {
-            p.sendMessage(getRank(p.getName()));
+        for (Player player : getAllPlayers()) {
+            player.sendMessage(getRank(player.getName()));
         }
         unsetAllPlayers();
         this.game = 0;
@@ -517,21 +490,21 @@ public class Room implements Listener {
             } else {
                 r = "[" + num + "]";
             }
-            for (Player p : getAllPlayers()) {
-                p.sendMessage(r + " " + map.getKey() + " 分数:" + map.getValue());
+            for (Player player : getAllPlayers()) {
+                player.sendMessage(r + " " + map.getKey() + " 分数:" + map.getValue());
             }
         }
     }
 
     public void severStop() {
-        for (Player p : getAllPlayers()) {
-            p.setHealth(20);
-            p.getFoodData().sendFoodLevel(20);
-            p.getFoodData().sendFoodLevel();
-            p.setGamemode(0);
-            p.removeAllEffects();
-            loadBag(p);
-            p.setNameTag(playerNameTag.get(p.getName()));
+        for (Player player : getAllPlayers()) {
+            player.getInventory().clearAll();
+            recoverPlayer(player);
+            player.setGamemode(0);
+            loadBag(player);
+            if (playerNameTag.containsKey(player.getName())) {
+                player.setNameTag(playerNameTag.get(player.getName()));
+            }
         }
         this.gamePlayer.clear();
         this.waitPlayer.clear();
@@ -539,19 +512,26 @@ public class Room implements Listener {
         this.joinGamePlayer = 0;
     }
 
-    public void unsetAllPlayers() {
+    private void recoverPlayer(Player player) {
+        player.setHealth(20);
+        player.getFoodData().sendFoodLevel(20);
+        player.removeAllEffects();
+    }
 
-        for (Player p : getAllPlayers()) {
-            p.setNameTag(playerNameTag.get(p.getName()));
+    public void unsetAllPlayers() {
+        for (Player player : getAllPlayers()) {
+            if (playerNameTag.containsKey(player.getName())) {
+                player.setNameTag(playerNameTag.get(player.getName()));
+            }
+            player.getInventory().clearAll();
             Position v3 = Position.fromObject(LeavePos, plugin.getServer().getLevelByName((String) data.get("leave_pos")));
-            p.teleport(v3);
-            p.setSpawn(v3);
-            p.setHealth(20);
-            p.getFoodData().sendFoodLevel(20);
-            p.getFoodData().sendFoodLevel();
-            p.setGamemode(0);
-            p.removeAllEffects();
-            loadBag(p);
+            player.teleport(v3);
+            player.setSpawn(v3);
+
+            recoverPlayer(player);
+            player.setGamemode(0);
+
+            loadBag(player);
         }
         this.gamePlayer.clear();
         this.waitPlayer.clear();
@@ -567,6 +547,9 @@ public class Room implements Listener {
             if ("§c退出游戏".equals(player.getInventory().getItemInHand().getCustomName())) {
                 player.sendMessage("§c>  §f你已退出游戏！");
                 leaveRoom(player);
+            } else if ("§a游戏介绍".equals(player.getInventory().getItemInHand().getCustomName())) {
+                FormWindowSimple window = new FormWindowSimple(gameType + "§6游戏玩法介绍", getGameRule());
+                player.showFormWindow(window);
             }
             event.setCancelled(true);
         }
@@ -601,17 +584,6 @@ public class Room implements Listener {
         if (getPlayerMode(event.getEntity()) != null) {
             event.setCancelled(true);
         }
-    }
-
-
-    private void recoverPlayer(Player player, String[] p1) {
-        Position v3;
-        player.setHealth(20);
-        player.getFoodData().sendFoodLevel(20);
-        player.removeAllEffects();
-        v3 = new Position(Integer.parseInt(p1[0]), Integer.parseInt(p1[1]), Integer.parseInt(p1[2]), level);
-        player.teleport(v3);
-        player.setSpawn(v3);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -669,5 +641,106 @@ public class Room implements Listener {
         }
     }
 
+    private String getGameRule() {
+        String rule;
+        switch (gameType) {
+            case "BeFast_1":
+                rule = "    §r§l§f游戏玩法：§r在游戏区域内，隐藏了钻石矿，玩家需找到它并挖掉，视为完成游戏。\n开始游戏时玩家玩家会获得《镐子 斧头 铲子 剪刀》工具，在木头石头泥土里，玩家需快速挖除这些木头石头泥土，找到钻石矿，完成游戏。\n" +
+                        "    §l§f得分条件：§r完成游戏越快得分越高。";
+                break;
+            case "BeFast_2":
+                rule = "    §l§f游戏玩法：§r玩家需正确使用工具来挖除方块，如斧子是用来挖木头类，镐子是用来挖石头类等，\n" +
+                        "    §l§f得分条件：§r情况玩家需快速反应，反应越快，方块破坏的就越多，挖掉的越多得分越高";
 
+                break;
+            case "KeepStanding":
+                rule = "    §l§f游戏玩法：§r玩家需在高地中保持站立，玩家可使用手中木棒来击退其他玩家。\n" +
+                        "    §l§f得分条件：§r在高地中站立得越久，得分越高。";
+                break;
+            case "KeepStanding_2":
+                rule = "    §l§f游戏玩法：§r玩家使用手中木棒来击退其他玩家,使其他玩家击退至虚空\n" +
+                        "    §l§f得分条件：§r存活得越久，得分越高。";
+                break;
+            case "SnowballWar":
+                rule = "    §l§f游戏玩法：§r玩家需挖取雪块来获得雪球，并投掷其他玩家。玩家若被击中，直接淘汰。\n玩家不需要去拾取雪球，获得的雪球直接发送至背包，且被挖的雪块不会被破坏。（实质就是雪球大战）\n" +
+                        "    §l§f得分条件：§r存活得越久，得分越高。";
+                break;
+            case "SnowballWar_2":
+                rule = "    §l§f游戏玩法：§r本体：掘战游戏（掘一死战），玩家需用铲子挖雪块,来使玩家掉落至虚空。\n" +
+                        "    §l§f得分条件：§r存活得越久，得分越高。";
+                break;
+            case "Parkour":
+                rule = "    §l§f游戏玩法：§r跑酷，不用多介绍了吧！\n" +
+                        "    §l§f得分条件：§r到达终点越快得分越高。";
+                break;
+            case "MineRun":
+                rule = "    §l§f游戏玩法：§r玩家在行走中不能踩到地雷《即为石制压力板》，踩到则游戏失败，传送至开始点重新开始。\n" +
+                        "    §l§f得分条件：§r到达终点越快得分越高。";
+                break;
+            case "OreRace":
+                rule = "    §l§f游戏玩法：§r三维收集矿物，场地为xyz的空间\n" +
+                        "    §l§f得分条件：§r玩家需收集矿物来得分，收集矿物越多得分越高，矿物越稀有得分越高。";
+                break;
+            case "OreRace_2":
+                rule = "    §f§l游戏玩法：§r二维收集矿物，场地为xy的空间，并及时提交收集到的物品\n" +
+                        "    §l§f得分条件：§r玩家需收集矿物来得分，收集矿物越多得分越高，矿物越稀有得分越高。\n§c请在游戏结束前，§a点击出发地的钻石§c块完成提交，只有提交的玩家才有得分";
+                break;
+            case "BeFast_3":
+                rule = "    §l§f游戏玩法：§r玩家需用手中的方块快速搭桥至终点区，玩家可攻击他人，使他人踏入虚空重新进行游戏。\n" +
+                        "    §l§f得分条件：§r到达终点越快得分越高。";
+                break;
+            case "BeFast_4":
+                rule = "    游戏玩法&§l§f得分条件：§r玩家需挖取矿石需要用同物质的镐子挖，如铁矿石要用铁镐挖，钻石矿要用钻石镐挖等";
+                break;
+            case "Weeding":
+                rule = "    §l§f游戏玩法：§r除草，玩家需快速挖掉杂草方块。\n" +
+                        "    §l§f得分条件：§r挖掉越多者得分越高。";
+                break;
+            case "MakeItem":
+                rule = "    §l§f游戏玩法：§r按照目标物品，并自行获得原料，最后制作目标物品\n" +
+                        "    §l§f得分条件：§r制作目标物品越快得分越高。";
+                break;
+            case "WatchingFeet":
+                rule = "    §l§f游戏玩法：§rTNTRUN 保持行走，不要跌落\n" +
+                        "    §l§f得分条件：§r存活得越久得分越高";
+                break;
+            case "FallingRun":
+                rule = "    §l§f游戏玩法：§r塌方跑酷 小心，不要被高空生成的方块砸到\n" +
+                        "    §l§f得分条件：§r存活得越久得分越高";
+                break;
+            case "TrafficLight":
+                rule = "    §l§f游戏玩法：§r玩家需注意手中的方块颜色变化，绿色羊毛为绿灯，黄色为黄灯，红色为红灯。\n绿灯，黄灯可行走，若红灯还在行走，则游戏失败，传送至开始点重新开始。\n" +
+                        "    §l§f得分条件：§r到达终点越快得分越高，奖励也越丰富。\n" +
+                        "    §c§l##提醒：黄灯时要停止一切动作";
+                break;
+            case "RedAlert":
+                rule = "    §l§f游戏玩法：§r游戏场地中的方块会按照 [白->黄->橙->红->消失] 变化，玩家须尽可能的让自己不向下掉落\n" +
+                        "    §l§f得分条件：§r存活得越久得分越高";
+                break;
+            case "SnowSlide":
+                rule = "    §l§f游戏玩法：§r不惜一切代价！不要被雪球砸到！及时躲避天上掉下来的雪球！\n" +
+                        "    §l§f得分条件：§r存活得越久得分越高";
+                break;
+            case "AvoidPoison":
+                rule = "    §l§f游戏玩法：§r不要被天上掉下来的药水砸到！及时使用你的治疗药水，注意治疗药水是有限的哦！\n" +
+                        "    §l§f得分条件：§r存活得越久得分越高";
+                break;
+            case "CollectOre":
+                rule = "    §l§f游戏玩法：§r天上掉馅饼啦！快去收集掉下来的矿石吧！\n" +
+                        "    §l§f得分条件：§r矿石越稀有得分越高";
+                break;
+            case "HelpHen":
+                rule = "    §l§f游戏玩法：§rSTEVE的母鸡正在下蛋，请帮助母鸡接下她生的蛋吧！\n" +
+                        "    §l§f得分条件：§r收集的蛋越多得分越高";
+                break;
+            case "HuntingDiamond":
+                rule = "    §l§f游戏玩法：§r地图中藏了一些稀有的钻石，请把它找出来吧！（钻石是以掉落物的形式）\n" +
+                        "    §l§f得分条件：§r收集钻石越快得分越高";
+                break;
+            default:
+                rule = "";
+                break;
+        }
+        return rule;
+    }
 }

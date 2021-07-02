@@ -15,9 +15,15 @@ public class BeFast_2 extends Games implements Listener {
 
     public BeFast_2(Room room) {
         super(room);
+        this.tools = new Item[4];
+        tools[0] = Item.get(Item.DIAMOND_SHOVEL, 0, 1);
+        tools[1] = Item.get(Item.DIAMOND_PICKAXE, 0, 1);
+        tools[2] = Item.get(Item.DIAMOND_AXE, 0, 1);
+        tools[3] = Item.get(Item.DIAMOND_SWORD, 0, 1);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onBreak(BlockBreakEvent event) {
         if (room.gameType.equals("BeFast_2")) {
             Player player = event.getPlayer();
@@ -56,13 +62,14 @@ public class BeFast_2 extends Games implements Listener {
         }
     }
 
+    @Override
     public void madeArena() {
         Level level = room.level;
-        int v = room.S*12;
+        int v = room.S * 12;
         for (int x = room.xi; x <= room.xa; x++) {
             for (int z = room.zi; z <= room.za; z++) {
                 for (int y = room.yi; y < room.yi + 13; y++) {
-                    level.setBlock(new Vector3(x, y+1, z), Block.get(1, 0));//石头
+                    level.setBlock(new Vector3(x, y + 1, z), Block.get(1, 0));//石头
                 }
             }
         }

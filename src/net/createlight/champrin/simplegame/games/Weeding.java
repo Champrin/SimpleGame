@@ -6,6 +6,7 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockBreakEvent;
+import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
 import net.createlight.champrin.simplegame.Room;
@@ -14,9 +15,12 @@ public class Weeding extends Games implements Listener {
 
     public Weeding(Room room) {
         super(room);
+        this.tools = new Item[1];
+        tools[0] = Item.get(Item.DIAMOND_SHOVEL, 0, 1);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onBreak(BlockBreakEvent event) {
         if (room.gameType.equals("Weeding")) {
             Player player = event.getPlayer();
@@ -31,11 +35,12 @@ public class Weeding extends Games implements Listener {
         }
     }
 
+    @Override
     public void madeArena() {
         Level level = room.level;
         for (int x = room.xi; x <= room.xa; x++) {
             for (int z = room.zi; z <= room.za; z++) {
-                level.setBlock(new Vector3(x, room.yi+1, z), Block.get(Block.TALL_GRASS, 0));
+                level.setBlock(new Vector3(x, room.yi + 1, z), Block.get(Block.TALL_GRASS, 0));
             }
         }
         finishBuild();

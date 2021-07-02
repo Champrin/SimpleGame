@@ -7,6 +7,7 @@ import cn.nukkit.entity.item.EntityFallingBlock;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.GlobalBlockPalette;
 import cn.nukkit.math.Vector3;
@@ -29,11 +30,25 @@ public class FallingRun extends Games implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDamage(EntityDamageEvent event) {
         if (room.gameType.equals("FallingRun")) {
-            Entity player = event.getEntity();
-            if (player instanceof Player) {
+            if (event.getEntity() instanceof Player) {
+                Player player = (Player) event.getEntity();
                 if (room.gamePlayer.contains(player)) {
+                    if (event instanceof EntityDamageByEntityEvent) {
+                        Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+                        if (gameTime <= mainTime * 0.3) {
+                            if (damager instanceof Player) {
+                                if (room.gamePlayer.contains((Player) damager)) {
+                                    event.setCancelled(true);
+                                    event.setDamage(0);
+                                    double yaw = Math.atan2((player.x - damager.x), (player.z - damager.z));
+                                    player.knockBack(damager, 0, Math.sin(yaw), Math.cos(yaw), 1);
+                                }
+                            }
+                        }
+                    }
                     if (player.getHealth() - event.getDamage() <= 0) {
-                        gameFail((Player) player);
+                        event.setCancelled(true);
+                        gameFail(player);
                     }
                 }
             }
@@ -52,7 +67,7 @@ public class FallingRun extends Games implements Listener {
             nbt.putInt("TileID", id);
             nbt.putByte("Data", 0);
 
-            EntityFallingBlock target = (EntityFallingBlock) Entity.createEntity("EntityFallingBlock", player, nbt);
+            EntityFallingBlock target = new EntityFallingBlock(player.chunk, nbt);
             target.setDataProperty(new IntEntityData(2, GlobalBlockPalette.getOrCreateRuntimeId(id, 0)));
             target.spawnToAll();
 
@@ -70,4 +85,8 @@ public class FallingRun extends Games implements Listener {
         }
     }
 
+    @Override
+    public void madeArena() {
+
+    }
 }

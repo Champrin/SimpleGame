@@ -5,7 +5,7 @@ import cn.nukkit.block.Block;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
-import cn.nukkit.event.player.PlayerItemHeldEvent;
+import cn.nukkit.event.entity.EntityInventoryChangeEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
@@ -16,7 +16,7 @@ import java.util.Random;
 public class TrafficLight extends Games implements Listener {
 
     //红绿黄、灯种类
-    private int r = 0, g = 0, y = 0;
+    private int r, g, y;
     private String type = "g";
     private int rt = 0, gt = 0, yt = 0;
 
@@ -28,6 +28,7 @@ public class TrafficLight extends Games implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onMove(PlayerMoveEvent event) {
         if (room.gameType.equals("TrafficLight")) {
             Player player = event.getPlayer();
@@ -50,12 +51,14 @@ public class TrafficLight extends Games implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onHeld(PlayerItemHeldEvent event) {
+    @EventHandler(priority = EventPriority.MONITOR) @SuppressWarnings("unused")
+    public void onPickup(EntityInventoryChangeEvent event) {
         if (room.gameType.equals("TrafficLight")) {
-            Player player = event.getPlayer();
-            if (room.gamePlayer.contains(player)) {
-                event.setCancelled(true);
+            if (event.getEntity() instanceof Player) {
+                Player player = (Player) event.getEntity();
+                if (room.gamePlayer.contains(player)) {
+                    event.setCancelled(true);
+                }
             }
         }
     }

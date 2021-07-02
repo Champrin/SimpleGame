@@ -7,6 +7,7 @@ import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
+import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
 import net.createlight.champrin.simplegame.Room;
@@ -16,9 +17,12 @@ public class SnowballWar_2 extends Games implements Listener {
 
     public SnowballWar_2(Room room) {
         super(room);
+        this.tools = new Item[1];
+        tools[0] = Item.get(Item.DIAMOND_SHOVEL, 0, 1);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onBreak(BlockBreakEvent event) {
         if (room.gameType.equals("SnowballWar_2")) {
             Player player = event.getPlayer();
@@ -31,6 +35,7 @@ public class SnowballWar_2 extends Games implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onMove(PlayerMoveEvent event) {
         if (room.gameType.equals("SnowballWar_2")) {
             Player player = event.getPlayer();
@@ -42,6 +47,8 @@ public class SnowballWar_2 extends Games implements Listener {
             }
         }
     }
+
+    @Override
     public void madeArena() {
         Level level = room.level;
         for (int x = room.xi; x <= room.xa; x++) {
