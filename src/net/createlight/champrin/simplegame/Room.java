@@ -77,10 +77,10 @@ public class Room implements Listener {
                 this.GameType = new OreRace(this);
                 this.GameTask = new RoomSchedule(this, GameType);
                 break;
-            /*case "OreRace_2":
+            case "OreRace_2":
                 this.GameType = new OreRace_2(this);
                 this.GameTask = new RoomSchedule(this, GameType);
-                break;*/
+                break;
             case "KeepStanding":
             case "KeepStanding_2":
                 this.GameType = new KeepStanding(this);
@@ -146,16 +146,16 @@ public class Room implements Listener {
                 this.GameType = new HelpHen(this);
                 this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
                 break;
+            case "CollectOre":
+                this.GameType = new CollectOre(this);
+                this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
+                break;
             /*case "SnowSlide":
                 this.GameType = new SnowSlide(this);
                 this.GameTask = new RoomSchedule_3(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
                 break;
             case "AvoidPoison":
                 this.GameType = new AvoidPoison(this);
-                this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
-                break;
-            case "CollectOre":
-                this.GameType = new CollectOre(this);
                 this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
                 break;
             case "HuntingDiamond":

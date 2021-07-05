@@ -44,14 +44,14 @@ public class SimpleGame extends PluginBase implements Listener {
         //put(8, "MakeItem");
         put(9, "MineRun");
         put(10, "OreRace");
-        //put(11, "OreRace_2");
+        put(11, "OreRace_2");
         put(12, "Parkour");
         put(13, "SnowballWar");
         put(14, "SnowballWar_2");
         put(15, "Weeding");
 
         //put(16, "AvoidPoison");
-        //put(17, "CollectOre");
+        put(17, "CollectOre");
         put(18, "FallingRun");
         put(19, "HelpHen");
         put(20, "RedAlert");
