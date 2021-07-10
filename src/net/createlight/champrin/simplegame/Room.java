@@ -153,7 +153,7 @@ public class Room implements Listener {
             /*case "SnowSlide":
                 this.GameType = new SnowSlide(this);
                 this.GameTask = new RoomSchedule_3(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
-                break;
+                break;*/
             case "AvoidPoison":
                 this.GameType = new AvoidPoison(this);
                 this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
@@ -161,7 +161,7 @@ public class Room implements Listener {
             case "HuntingDiamond":
                 this.GameType = new HuntingDiamond(this);
                 this.GameTask = new RoomSchedule_3(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
-                break;*/
+                break;
         }
         this.plugin.getServer().getScheduler().scheduleRepeatingTask(GameTask, 20);
         assert GameType != null;//断言
