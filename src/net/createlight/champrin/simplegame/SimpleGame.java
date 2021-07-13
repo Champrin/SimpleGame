@@ -38,7 +38,7 @@ public class SimpleGame extends PluginBase implements Listener {
         put(2, "BeFast_2");
         put(3, "BeFast_3");
         put(4, "BeFast_4");
-        //put(5, "HuntingDiamond");
+        put(5, "HuntingDiamond");
         put(6, "KeepStanding");
         put(7, "KeepStanding_2");
         //put(8, "MakeItem");
@@ -58,6 +58,9 @@ public class SimpleGame extends PluginBase implements Listener {
         put(21, "SnowSlide");
         put(22, "TrafficLight");
         put(23, "WatchingFeet");
+        //put(24, "SurvivalWar");
+        //put(25, "FightForColour");
+        //put(26, "ColourShot");
     }};
 
     public LinkedHashMap<String, LinkedHashMap<String, Object>> roomInformation = new LinkedHashMap<>();//房间基本信息
@@ -94,7 +97,6 @@ public class SimpleGame extends PluginBase implements Listener {
     }
 
     public void setConfigData() {
-        instance = this;
         if (this.config.get("占领加分") == null) {
             this.config.set("占领加分", 10);
             this.config.set("团队加分", 2);
@@ -287,10 +289,24 @@ public class SimpleGame extends PluginBase implements Listener {
                         break;
                 }
             } else {
-                room.set(setters.get(name).get("setc"), xyz);
+                String index = setters.get(name).get("setc");
+                room.set(index, xyz);
+                switch (index) {
+                    case "wait_pos":
+                    case "pos1":
+                    case "pos2":
+                        room.set("room_world", b.level.getFolderName());
+                        break;
+                    case "leave_pos":
+                        room.set("leave_world", b.level.getFolderName());
+                        break;
+                }
+                room.set("arena", false);
+                room.set("state", true);
                 rooms.remove(room_name);
                 roomInformation.remove(room_name);
-                setRoomData(room,room_name);
+                setRoomData(room, room_name);
+                setters.remove(name);
             }
             room.save();
         }

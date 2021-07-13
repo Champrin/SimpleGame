@@ -52,7 +52,8 @@ public class RoomSchedule_2 extends Task {
         if (room.game == 1) {
             this.game.gameTime = game.gameTime - 1;
             for (Player p : room.gamePlayer) {
-                String msg = "§e剩余玩家: §f" + room.gamePlayer.size() + "\n";
+                String msg = " §e§l==§f" + room.gameType + "§e==\n";
+                msg = msg + "§e剩余玩家: §f" + room.gamePlayer.size() + "\n";
                 //msg = msg + "§e你的得分: §f" + room.rank.get(p.getName()) + "\n";
                 msg = msg + "§d时间剩余: §b" + game.gameTime + "\n\n";
                 p.sendTip(msg);

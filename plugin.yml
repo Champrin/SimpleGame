@@ -1,6 +1,6 @@
 name: SimpleGame
 main: net.createlight.champrin.simplegame.SimpleGame
-version: "1.6.0"
+version: "1.7.0"
 api: ["1.0.8"]
 
 author: Champrin

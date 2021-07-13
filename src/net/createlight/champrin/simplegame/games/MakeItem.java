@@ -22,7 +22,7 @@ public class MakeItem extends Games implements Listener {
 
     public MakeItem(Room room) {
         super(room);
-        this.type = new Random().nextInt(3);
+        this.type = new Random().nextInt(3)+1;
     }
 
     public boolean isCraft(String name, int itemId) {
@@ -80,9 +80,9 @@ public class MakeItem extends Games implements Listener {
                     if (this.type == 1) {
                         this.MakeItem_1((Player) player, event.getNewItem().getId());
                     } else if (this.type == 2) {
-                        this.MakeItem_1((Player) player, event.getNewItem().getId());
+                        this.MakeItem_2((Player) player, event.getNewItem().getId());
                     } else if (this.type == 3) {
-                        this.MakeItem_1((Player) player, event.getNewItem().getId());
+                        this.MakeItem_3((Player) player, event.getNewItem().getId());
                     }
                     if (this.room.rank.get(((Player) player).getName()) == 5) {
                         gameFinish((Player) player);
@@ -103,5 +103,10 @@ public class MakeItem extends Games implements Listener {
                 event.setCancelled(true);
             }
         }
+    }
+
+    @Override
+    public void madeArena() {
+        this.type = new Random().nextInt(3)+1;
     }
 }

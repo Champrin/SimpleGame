@@ -97,7 +97,7 @@ public abstract class Games {
     public void gameSucceed(Player player) {
         if (room.finishPlayer.contains(player)) return;
         room.finishPlayer.add(player);
-        room.addPoint(player, room.finishPlayer.size());
+        room.addPoint(player, room.finishPlayer.size() + 6);
         room.arenaMsg(player.getName() + "§e活到了最后！");
         room.stopGame();
     }

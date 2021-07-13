@@ -12,15 +12,14 @@ public class RoomSchedule extends Task {
     private int mainTime, StartTime;
     private int maxTime, startTime;
     private Room room;
-    private Games game;
-    public RoomSchedule(Room room, Games game) {
+
+    public RoomSchedule(Room room) {
         this.room = room;
         this.StartTime = (int) room.data.get("startTime");
 
         this.startTime = StartTime;
         this.maxTime = (int) room.data.get("gameTime");
         this.mainTime = maxTime;
-        this.game = game;
     }
 
     @Override
@@ -56,7 +55,8 @@ public class RoomSchedule extends Task {
         if (room.game == 1) {
             this.mainTime = mainTime - 1;
             for (Player p : room.gamePlayer) {
-                String msg = "§e你的得分: §f" + room.rank.get(p.getName()) + "\n";
+                String msg = " §e§l==§f" + room.gameType + "§e==\n";
+                msg = msg + "§e你的得分: §f" + room.rank.get(p.getName()) + "\n";
                 msg = msg + "§d时间剩余: §b" + mainTime + "\n\n";
                 p.sendTip(msg);
             }

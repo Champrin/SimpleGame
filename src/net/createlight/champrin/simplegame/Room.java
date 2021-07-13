@@ -23,7 +23,6 @@ import net.createlight.champrin.simplegame.schedule.RoomSchedule;
 import net.createlight.champrin.simplegame.schedule.RoomSchedule_2;
 import net.createlight.champrin.simplegame.schedule.RoomSchedule_3;
 
-import javax.print.attribute.standard.PageRanges;
 import java.util.*;
 
 public class Room implements Listener {
@@ -50,7 +49,7 @@ public class Room implements Listener {
 
     public ArrayList<String> BreakGame = new ArrayList<>(Arrays.asList("OreRace", "OreRace_2", "SnowballWar", "SnowballWar_2", "BeFast_1", "BeFast_2", "BeFast_4", "Weeding", "MakeItem"));
     public ArrayList<String> PlaceGame = new ArrayList<>(Arrays.asList("BeFast_3", "SnowballWar"));
-    public ArrayList<String> DamageGame = new ArrayList<>(Arrays.asList("KeepStanding", "KeepStanding_2", "SnowballWar", "FallingRun", "WatchingFeet", "AvoidPoison"));
+    public ArrayList<String> DamageGame = new ArrayList<>(Arrays.asList("KeepStanding", "KeepStanding_2", "SnowballWar", "FallingRun", "WatchingFeet", "AvoidPoison", "SurvivalWar"));
 
     public Room(String roomId, SimpleGame plugin) {
         this.plugin = plugin;
@@ -75,56 +74,56 @@ public class Room implements Listener {
         switch (gameType) {
             case "OreRace":
                 this.GameType = new OreRace(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "OreRace_2":
                 this.GameType = new OreRace_2(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "KeepStanding":
             case "KeepStanding_2":
                 this.GameType = new KeepStanding(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "SnowballWar":
                 this.GameType = new SnowballWar(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "SnowballWar_2":
                 this.GameType = new SnowballWar_2(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "Parkour":
                 this.GameType = new Parkour(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "MineRun":
                 this.GameType = new MineRun(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "BeFast_1":
                 this.GameType = new BeFast_1(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "BeFast_2":
                 this.GameType = new BeFast_2(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "BeFast_3":
                 this.GameType = new BeFast_3(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "BeFast_4":
                 this.GameType = new BeFast_4(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             case "Weeding":
                 this.GameType = new Weeding(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;
             /*case "MakeItem":
                 this.GameType = new MakeItem(this);
-                this.GameTask = new RoomSchedule(this, GameType);
+                this.GameTask = new RoomSchedule(this);
                 break;*/
             case "WatchingFeet":
                 this.GameType = new WatchingFeet(this);
@@ -150,10 +149,10 @@ public class Room implements Listener {
                 this.GameType = new CollectOre(this);
                 this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
                 break;
-            /*case "SnowSlide":
+            case "SnowSlide":
                 this.GameType = new SnowSlide(this);
                 this.GameTask = new RoomSchedule_3(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
-                break;*/
+                break;
             case "AvoidPoison":
                 this.GameType = new AvoidPoison(this);
                 this.GameTask = new RoomSchedule_2(this, (net.createlight.champrin.simplegame.games2.Games) GameType);
@@ -184,7 +183,7 @@ public class Room implements Listener {
         int z = zi;
         int y = yi;
         if (num != 0) {
-            y = new Random().nextInt(num) + yi;
+            y = new Random().nextInt(num+1) + yi;
         }
         if (zi - za != 0) {
             z = new Random().nextInt(za - zi + 1) + zi;
