@@ -1,0 +1,182 @@
+#Only substitutes in the default information can be filled in. Substitutes not in the default information cannot be filled in.
+#PS:For example, if there has '%PLAYER%' in 'player-nameTag: "[PLAYER] §f%PLAYER%"', then you can only use "PLAYER" in your custom information.But you can not use '%RANK%' and so on.
+#The default information format is list information, which is wrapped automatically only once. If you want to have more than one line, you can add the '\n' newline character by yourself.
+
+
+#The nameTag of the player in the SimpleGame
+#PS:When the game stops, the system will automatically change to the original nameTag
+#%PLAYER% Use to replace of player's name
+player-nameTag: "[PLAYER] §f%PLAYER%"
+
+#Player chat message format in the SimpleGame
+#%PLAYER% Use to replace of player's name %MSG% Use to replace of player's message
+room-chat-tag: "%PLAYER%§e§l>§r %MSG%"
+
+#when player joins a room
+#%PLAYER% Use to replace of player's name
+join-game-PlayerHasJoined: ">>  You have joined a room. Please enter '@ hub' in the chat bar to try again."
+join-game-RoomFull: ">>  The room is full."
+join-game-RoomHasStarted: ">>  The room has started."
+join-game-Succeed: ">  §a%PLAYER%§f joined the room"
+join-game-TipAboutHowToQuit: "§cIf you want to quit the game, please enter '@hub'"
+
+#when player quits room or quits game
+#%PLAYER% Use to replace of player's name
+quit-game-room: ">  §a%PLAYER%§f left the room."
+quit-game-player: "§c>  §fYou're out of the game!!"
+
+#when player is in spectator mode
+#PS:When the player fails or finishes the game, he will enter gamemode3, which is the viewing mode.
+view-game: ">> You're in spectator mode"
+
+#when player finishes game
+#%PLAYER% Use to replace of player's name
+finish-game-person-1: "§a You finished the game!!!"
+# %RANK% Use to replace of player's rank
+finish-game-person-2: "§d  You're the No.§c%RANK%§dto finish!"
+finish-game-room: "%PLAYER%§a finished the game"
+#Prompt players need to wait for other players, if players quit the game will not have results.
+finish-game-tip-1: "§e  You have been switched to watch mode, waiting patiently for others to complete the game!"
+finish-game-tip-2: "§e  If you quit, no results will be recorded!"
+
+#when player succeeds game
+#%PLAYER% Use to replace of player's name
+succeed-game-person: ">> §eYou survive in the end!"
+succeed-game-room: "%PLAYER%§e survived in the end!"
+
+#when player fails game
+#%PLAYER% Use to replace of player's name
+fail-game-person: ">> §cYou failed the game!"
+fail-game-room: "%PLAYER%§c failed the game"
+fail-game-tip: ">> §eWait patiently for others to finish the game!"
+
+#When the game stops,send to players all rank information or personal rank information
+# %PLAYER% Use to replace of player's name %RANK% Use to replace of player's rank %POINTS% Use to replace of player's points
+all-rank: "%RANK% %PLAYER% Points: %POINTS%"
+person-rank: "§aYour rank: §e[%RANK%] §aYour points: §e[%POINTS%]"
+
+#The name of the related item, that is, the tip holding an item
+quit-game-item: "§cQuit Room"
+game-rule-item: "§aGame Rule"
+
+#In some games, some messages may be sent
+#MakeItem
+item-repeat-make: "§a It's no bonus to make this item repeatedly~"
+#MineRun
+stepping-on-mine: "§c You stepped on a mine! Start over!"
+
+#In some games, it needs to give the item a display name
+#CollectOre
+#PS:When mineral items are created, the name "<< Ore >>" will be displayed.It's the same with HuntingDiamond.
+CollectOre-item-nameTag: "<< Ore >>"
+#HuntingDiamond
+HuntingDiamond-item-nameTag: "<< Diamond >>"
+#TrafficLight
+#PS:For example, when the player holds the wool, there will be a "Red Light" display
+item-green-customName: "§aGreen Light"
+item-yellow-customName: "§eYellow Light"
+item-red-customName: "§cRed Light"
+
+#When players enter the room, the number of players does not reach the minimum
+waiting-tip: "§f> §lWaiting for other players to join...<"
+
+#When the number of people in the room reaches the minimum, enter the countdown to start the game.
+#%TIME% Use to replace how much time is left to start the game.
+countdown-to-start-game: "§6%TIME%\n§eThe game is about to begin..."
+
+#Information display in some game processes
+HuntingDiamond-tip: "§fThe next diamond is found in §c§l%REMAINTIME% s"
+SnowSlide-tip:
+  - "§e§l==§fSnowSlide!§e=="
+  - "§aRound: §b§f%ROUND%"
+  - "§eRemaining players: §f%PLAYERS%"
+SnowSlide-round-remain-time: "§c§l%ROUNDTIME%§rs§e left in this round"
+SnowSlide-round-remain-players: "§eThere are §c§l%PLAYERS%§r§e players left in this round"
+SnowSlide-new-round-title: "§fThe No.§c§l%ROUND%§r round"
+gaming-tip-1:
+  - "§e§l==§f%GAMETYPE%§e=="
+  - "§eYour Points: §f%POINTS%"
+  - "§dRemaining time: §b%REMAINTIME%"
+gaming-tip-2:
+  - "§e§l==§f%GAMETYPE%§e=="
+  - "§eRemaining players: §f%PLAYERS%"
+  - "§dRemaining time: §b%REMAINTIME%"
+s
+#Introduction to the game
+#PS:When the player right clicks the game rule item, the GUI information of game introduction will pop up
+#%GAMETYPE% Use to replace of game type
+game-rule-title: "§6Introduction to §a§l%GAMETYPE%"
+BeFast_1:
+  - "    §r§l§fHow to play the game:§rIn the game area, there is a hidden diamond mine. Players need to find it and dig it out, which is regarded as the completion of the game."
+  - "Players need to find diamond mines in wood, stone, soil and so on to complete the game."
+  - "    §l§fScoring conditions:§rThe faster you finish the game, the higher the score."
+BeFast_2:
+  - "    §l§fHow to play the game:§rPlayers need to use the right tools to dig out the box, such as axe is used to dig wood, pick is used to dig stone and so on."
+  - "    §l§fScoring conditions:§rSituation players need to respond quickly. The faster the reaction, the more blocks will be destroyed. The more you dig out, the higher the score."
+KeepStanding:
+  - "    §l§fHow to play the game:§rPlayers need to stand in the highland, players can repel other players."
+  - "    §l§fScoring conditions:§rThe longer you stand on high ground, the higher the score."
+KeepStanding_2:
+  - "    §l§fHow to play the game:§rPlayers can repel other players and make them fight back to the void."
+  - "    §l§fScoring conditions:§rThe longer you live, the higher the score."
+SnowballWar:
+  - "    §l§fHow to play the game:§rPlayers need to dig up snow blocks to get snowballs and throw them at other players. If players are hit, they will be eliminated directly."
+  - "Players don't need to pick up snowballs. The snowballs they get are directly sent to the backpack, and the dug snow blocks won't be damaged（The essence is snowball war)."
+  - "    §l§fScoring conditions:§rThe longer you live, the higher the score."
+SnowballWar_2:
+  - "    §l§fHow to play the game:§rPlayers need shovel to dig snow blocks to make players fall into the void."
+  - "    §l§fScoring conditions:§rThe longer you live, the higher the score."
+Parkour:
+  - "    §l§fHow to play the game:§rParkour, no more introduction!"
+  - "    §l§fScoring conditions:§rThe faster you get to the finish line, the higher the score."
+MineRun:
+  - "    §l§fHow to play the game:§rPlayers can't step on the mine (i.e. stone pressure board) while walking. If they step on the mine, the game will fail and the game will be transmitted to the starting point to start again."
+  - "    §l§fScoring conditions:§rThe faster you get to the finish line, the higher the score."
+OreRace:
+  - "    §l§fHow to play the game:§rThree dimensional collection of minerals, the site is XYZ space."
+  - "    §l§fScoring conditions:§rPlayers need to collect minerals to score. The more minerals they collect, the higher the score. The rarer the minerals, the higher the score."
+OreRace_2:
+  - "    §f§lHow to play the game:§rTwo dimensional collection of minerals, the site for XY space, and timely submission of collected items."
+  - "    §l§fScoring conditions:§rPlayers need to collect minerals to score. The more minerals they collect, the higher the score. The rarer the minerals, the higher the score."
+  - "§cBefore the end of the game,§a click on the diamond block of the starting place§c to submitting, only the submitted player can get a score."
+BeFast_3:
+  - "    §l§fHow to play the game:§rPlayers need the box in their hands to quickly bridge to the terminal area. Players can attack others and make them step into the void to play the game again."
+  - "    §l§fScoring conditions:§rThe faster you get to the finish line, the higher the score."
+BeFast_4:
+  - "    §l§fHow to play the game:§rPlayers need to dig ore with pickaxes of the same material, such as iron ore with pickaxes, diamond ore with diamond pickaxes, etc."
+  - "    §l§fScoring conditions:§rThe faster you dig, the higher the score."
+Weeding:
+  - "    §l§fHow to play the game:§rWeeding, players need to quickly dig out weeds box."
+  - "    §l§fScoring conditions:§rThe more you dig out, the higher the score."
+MakeItem:
+  - "    §l§fHow to play the game:§rAccording to the target items, and obtain raw materials, and finally make the target items."
+  - "    §l§fScoring conditions:§rThe faster the target item is made, the higher the score."
+WatchingFeet:
+  - "    §l§fHow to play the game:§rKeep walking and don't fall."
+  - "    §l§fScoring conditions:§rThe longer you live, the higher the score."
+FallingRun:
+  - "    §l§fHow to play the game:§rBe careful, don't be hit by the blocks generated from high altitude."
+  - "    §l§fScoring conditions:§rThe longer you live, the higher the score."
+TrafficLight:
+  - "    §l§fHow to play the game:§rPlayers need to pay attention to the color change of the box in their hands. Green wool is the green light, yellow is the yellow light, and red is the red light."
+  - "Green light, yellow light can walk, if the red light is still walking, then the game failed, transmitted to the starting point to start again."
+  - "    §l§fScoring conditions:§rThe faster you get to the finish line, the higher the score."
+  - "    §c§l##Reminder: stop all actions when the light is yellow."
+RedAlert:
+  - "    §l§fHow to play the game:§rThe squares in the game field will change according to [white, yellow, orange, red, disappear]. Players should try their best not to drop down."
+  - "    §l§fScoring conditions:§rThe longer you live, the higher the score."
+SnowSlide:
+  - "    §l§fHow to play the game:§rAt all costs! Don't get hit by snowballs! Avoid snowballs falling from the sky in time!"
+  - "    §l§fScoring conditions:§rThe longer you live, the higher the score."
+AvoidPoison:
+  - "    §l§fHow to play the game:§rDon't be hit by the drops poison the sky! Use your treatment poison in time, pay attention to the treatment poison is limited!"
+  - "    §l§fScoring conditions:§rThe longer you live, the higher the score."
+CollectOre:
+  - "    §l§fHow to play the game:§rPie in the sky! Go and collect the fallen ore!"
+  - "    §l§fScoring conditions:§rThe rarer the ore, the higher the score."
+HelpHen:
+  - "    §l§fHow to play the game:§rSteve's hen is laying eggs. Please help the hen to catch her eggs!"
+  - "    §l§fScoring conditions:§rThe more eggs you collect, the higher the score."
+HuntingDiamond:
+  - "    §l§fHow to play the game:§rThere are some rare diamonds in the map. Please find them out（Diamonds are in the form of falling objects)."
+  - "    §l§fScoring conditions:§rThe faster you collect diamonds, the higher your score."
