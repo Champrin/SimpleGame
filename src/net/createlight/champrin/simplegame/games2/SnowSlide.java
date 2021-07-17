@@ -23,11 +23,21 @@ public class SnowSlide extends Games implements Listener {
     private int round;
     private int roundTime;
     private ArrayList<Vector3> blockPlace = new ArrayList<>();
+    private String tip, remain_time_tip, remain_players_tip,new_round_title;
 
     public SnowSlide(Room room) {
         super(room);
         this.round = 1;
         this.roundTime = getTimeByRound();
+
+        this.remain_time_tip = room.plugin.config.getString("SnowSlide-round-remain-time");
+        this.remain_players_tip = room.plugin.config.getString("SnowSlide-round-remain-players");
+        this.new_round_title = room.plugin.config.getString("SnowSlide-new-round-title");
+        StringBuilder tip = new StringBuilder();
+        for (String string : room.plugin.config.getStringList("SnowSlide-tip")) {
+            tip.append(string).append("\n");
+        }
+        this.tip = tip.toString();
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -49,8 +59,6 @@ public class SnowSlide extends Games implements Listener {
                             }
                         }
                         if (damager instanceof EntityProjectile) {
-                            player.sendMessage("§c>> 你被雪球砸中了!");
-                            room.arenaMsg(player.getName() + "§f被雪球砸中了");
                             gameFail(player);
                         }
                     }
@@ -67,13 +75,12 @@ public class SnowSlide extends Games implements Listener {
         }
         this.gameTime = mainTime;
         this.roundTime = roundTime - 1;
+        StringBuilder pop = new StringBuilder();
         for (Player player : room.gamePlayer) {
-            String msg = " §e§l==§f雪崩!§e==\n";
-            msg = msg + "§a回合: §b§f" + round + "§r\n";
-            msg = msg + "§e剩余人数: §b" + room.gamePlayer.size() + "\n";
+            pop.append(tip.replaceAll("%ROUND%", String.valueOf(round)).replaceAll("%PLAYERS%", String.valueOf(room.gamePlayer.size())));
             room.addPoint(player, 1);
             if (this.roundTime > 0) {
-                msg = msg + "§e本回合剩余§c§l" + roundTime + "§r§e秒\n";
+                pop.append(remain_time_tip.replaceAll("%ROUNDTIME%", String.valueOf(roundTime))).append("\n");
                 if (this.roundTime < 5) {
                     player.getLevel().addSound(player, Sound.RANDOM_ANVIL_LAND);
                 }
@@ -85,16 +92,17 @@ public class SnowSlide extends Games implements Listener {
                 player.getLevel().addSound(player, Sound.BLOCK_BAMBOO_HIT);
                 this.spawnSnowballs();
             } else {
-                msg = msg + "§a本轮剩余§c§l" + room.gamePlayer.size() + "§r§e名玩家\n";
+                pop.append(remain_players_tip.replaceAll("%PLAYERS%", String.valueOf(room.gamePlayer.size()))).append("\n");
             }
             if (this.roundTime == -5) {
                 this.cleanArena();
                 room.addPoint(player, round);
                 this.round = round + 1;
-                player.sendTitle("§f第§c§l" + round + "§r回合", "", 2, 20 * 2, 2);
+                player.sendTitle(new_round_title.replaceAll("%ROUND%", String.valueOf(round)), "", 2, 20 * 2, 2);
                 this.roundTime = this.getTimeByRound();
             }
-            player.sendPopup(msg);
+            player.sendPopup(pop.toString());
+            pop = new StringBuilder();
         }
     }
 

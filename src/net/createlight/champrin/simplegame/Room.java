@@ -2,6 +2,7 @@ package net.createlight.champrin.simplegame;
 
 import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
@@ -19,7 +20,7 @@ import cn.nukkit.scheduler.Task;
 import net.createlight.champrin.simplegame.games.*;
 import net.createlight.champrin.simplegame.games.Games;
 import net.createlight.champrin.simplegame.games2.*;
-import net.createlight.champrin.simplegame.schedule.RoomSchedule;
+import net.createlight.champrin.simplegame.schedule.RoomSchedule_1;
 import net.createlight.champrin.simplegame.schedule.RoomSchedule_2;
 import net.createlight.champrin.simplegame.schedule.RoomSchedule_3;
 
@@ -51,10 +52,15 @@ public class Room implements Listener {
     public ArrayList<String> PlaceGame = new ArrayList<>(Arrays.asList("BeFast_3", "SnowballWar"));
     public ArrayList<String> DamageGame = new ArrayList<>(Arrays.asList("KeepStanding", "KeepStanding_2", "SnowballWar", "FallingRun", "WatchingFeet", "AvoidPoison", "SurvivalWar"));
 
+    private String quitItemName,ruleItemName;
+
     public Room(String roomId, SimpleGame plugin) {
         this.plugin = plugin;
         this.roomId = roomId;
         this.data = plugin.roomInformation.get(roomId);
+
+        this.quitItemName = plugin.config.getString("quit-game-item");
+        this.ruleItemName = plugin.config.getString("game-rule-item");
 
         this.level = plugin.getServer().getLevelByName((String) data.get("room_world"));
         this.gameType = (String) data.get("gameName");
@@ -74,56 +80,56 @@ public class Room implements Listener {
         switch (gameType) {
             case "OreRace":
                 this.GameType = new OreRace(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "OreRace_2":
                 this.GameType = new OreRace_2(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "KeepStanding":
             case "KeepStanding_2":
                 this.GameType = new KeepStanding(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "SnowballWar":
                 this.GameType = new SnowballWar(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "SnowballWar_2":
                 this.GameType = new SnowballWar_2(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "Parkour":
                 this.GameType = new Parkour(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "MineRun":
                 this.GameType = new MineRun(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "BeFast_1":
                 this.GameType = new BeFast_1(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "BeFast_2":
                 this.GameType = new BeFast_2(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "BeFast_3":
                 this.GameType = new BeFast_3(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "BeFast_4":
                 this.GameType = new BeFast_4(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             case "Weeding":
                 this.GameType = new Weeding(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;
             /*case "MakeItem":
                 this.GameType = new MakeItem(this);
-                this.GameTask = new RoomSchedule(this);
+                this.GameTask = new RoomSchedule_1(this);
                 break;*/
             case "WatchingFeet":
                 this.GameType = new WatchingFeet(this);
@@ -183,7 +189,7 @@ public class Room implements Listener {
         int z = zi;
         int y = yi;
         if (num != 0) {
-            y = new Random().nextInt(num+1) + yi;
+            y = new Random().nextInt(num + 1) + yi;
         }
         if (zi - za != 0) {
             z = new Random().nextInt(za - zi + 1) + zi;
@@ -217,24 +223,13 @@ public class Room implements Listener {
         return null;
     }
 
-    public String getRank(String name) {
-        int a = 0;
-        for (Map.Entry<String, Integer> map : rank.entrySet()) {
-            a = a + 1;
-            if (map.getKey().equals(name)) {
-                return "§a你的排名: §e[" + a + "] §a你的分数: §e[" + map.getValue() + "]";
-            }
-        }
-        return "无数据";
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     @SuppressWarnings("unused")
     public void onChat(PlayerChatEvent event) {
         Player player = event.getPlayer();
         if (getPlayerMode(player) != null) {
             event.setCancelled(true);
-            arenaMsg(player.getNameTag() + " §e§l>§r " + event.getMessage());
+            arenaMsg(plugin.config.getString("room-chat-tag").replaceAll("%PLAYER%", player.getName()).replaceAll("%MSG%", event.getMessage()));
         }
     }
 
@@ -366,18 +361,18 @@ public class Room implements Listener {
         player.getInventory().setItem(8, (Item.get(64, 0, 1)).setCustomName("§c退出游戏"));
         player.teleport(ViewPos);
         player.setSpawn(ViewPos);
-        player.sendMessage(">> 你进入观战模式");
+        player.sendMessage(plugin.config.getString("view-game"));
     }
 
     public void joinToRoom(Player player) {
         if (getPlayerMode(player) != null) {
-            player.sendMessage(">>  你已经加入一个房间了,请在聊天栏输入“@hub”重试");
+            player.sendMessage(plugin.config.getString("join-game-PlayerHasJoined"));
             return;
         } else if (waitPlayer.size() >= getMaxPlayers()) {
-            player.sendMessage(">>  房间已满");
+            player.sendMessage(plugin.config.getString("join-game-RoomFull"));
             return;
         } else if (game == 1) {
-            player.sendMessage(">>  房间已开始");
+            player.sendMessage(plugin.config.getString("join-game-RoomHasStarted"));
             return;
         }
         Position v3 = Position.fromObject(WaitPos, plugin.getServer().getLevelByName((String) data.get("room_world")));
@@ -391,8 +386,8 @@ public class Room implements Listener {
         player.getInventory().setItem(8, (Item.get(64, 0, 1)).setCustomName("§c退出游戏"));
         player.getInventory().setItem(0, (Item.get(64, 0, 1)).setCustomName("§a游戏介绍"));
 
-        arenaMsg(">  §a" + player.getName() + "§f加入了房间");
-        player.sendMessage("§c若想退出游戏请输入 @hub");
+        arenaMsg(plugin.config.getString("join-game-Succeed").replaceAll("%PLAYER%", player.getName()));
+        player.sendMessage(plugin.config.getString("join-game-TipAboutHowToQuit"));
     }
 
     public void leaveRoom(Player player) {
@@ -415,7 +410,7 @@ public class Room implements Listener {
 
         this.joinGamePlayer = joinGamePlayer - 1;
         player.getInventory().clearAll();
-        arenaMsg(">  §a" + player.getName() + "§f离开了房间");
+        arenaMsg(plugin.config.getString("quit-game-room").replaceAll("%PLAYER%", player.getName()));
     }
 
     public void startGame() {
@@ -425,7 +420,7 @@ public class Room implements Listener {
             player.setGamemode(0);
             gamePlayer.add(player);
             playerNameTag.put(player.getName(), player.getNameTag());
-            player.setNameTag("[PLAYER] §f" + player.getName());
+            player.setNameTag(plugin.config.getString("player-nameTag").replaceAll("%PLAYER%", player.getName()));
             player.teleport(getStartVector3());
             player.setSpawn(getStartVector3());
         }
@@ -464,6 +459,7 @@ public class Room implements Listener {
     }
 
     public void stopGame() {
+        cleanDrop();
         getRichList();
         for (Player player : getAllPlayers()) {
             player.sendMessage(getRank(player.getName()));
@@ -472,6 +468,24 @@ public class Room implements Listener {
         this.game = 0;
         this.plugin.freeRooms.add(this);
         GameType.madeArena();
+    }
+    public void cleanDrop(){
+        for (Entity entity : level.getEntities()) {
+            if (entity instanceof EntityItem) {
+                entity.kill();
+                entity.close();
+            }
+        }
+    }
+    public String getRank(String name) {
+        int a = 0;
+        for (Map.Entry<String, Integer> map : rank.entrySet()) {
+            a = a + 1;
+            if (map.getKey().equals(name)) {
+                return plugin.config.getString("person-rank").replaceAll("%RANK%", String.valueOf(a)).replaceAll("%POINTS%", String.valueOf(map.getValue()));
+            }
+        }
+        return "This player's data is null.";
     }
 
     public void getRichList() {
@@ -490,7 +504,7 @@ public class Room implements Listener {
                 r = "[" + num + "]";
             }
             for (Player player : getAllPlayers()) {
-                player.sendMessage(r + " " + map.getKey() + " 分数:" + map.getValue());
+                player.sendMessage(plugin.config.getString("all-rank").replaceAll("%RANK%", r).replaceAll("%POINTS%", String.valueOf(map.getValue())).replaceAll("%PLAYER%", String.valueOf(map.getKey())));
             }
         }
     }
@@ -543,11 +557,11 @@ public class Room implements Listener {
     public void onTouch(PlayerInteractEvent event) {
         if (getPlayerMode(event.getPlayer()) != null) {
             Player player = event.getPlayer();
-            if ("§c退出游戏".equals(player.getInventory().getItemInHand().getCustomName())) {
-                player.sendMessage("§c>  §f你已退出游戏！");
+            if (quitItemName.equals(player.getInventory().getItemInHand().getCustomName())) {
+                player.sendMessage(plugin.config.getString("quit-game-player"));
                 leaveRoom(player);
-            } else if ("§a游戏介绍".equals(player.getInventory().getItemInHand().getCustomName())) {
-                FormWindowSimple window = new FormWindowSimple(gameType + "§6游戏玩法介绍", getGameRule());
+            } else if (ruleItemName.equals(player.getInventory().getItemInHand().getCustomName())) {
+                FormWindowSimple window = new FormWindowSimple(plugin.config.getString("game-rule-title").replaceAll("%GAMETYPE%", gameType), getGameRule());
                 player.showFormWindow(window);
             }
             event.setCancelled(true);
@@ -641,105 +655,10 @@ public class Room implements Listener {
     }
 
     private String getGameRule() {
-        String rule;
-        switch (gameType) {
-            case "BeFast_1":
-                rule = "    §r§l§f游戏玩法：§r在游戏区域内，隐藏了钻石矿，玩家需找到它并挖掉，视为完成游戏。\n开始游戏时玩家玩家会获得《镐子 斧头 铲子 剪刀》工具，在木头石头泥土里，玩家需快速挖除这些木头石头泥土，找到钻石矿，完成游戏。\n" +
-                        "    §l§f得分条件：§r完成游戏越快得分越高。";
-                break;
-            case "BeFast_2":
-                rule = "    §l§f游戏玩法：§r玩家需正确使用工具来挖除方块，如斧子是用来挖木头类，镐子是用来挖石头类等，\n" +
-                        "    §l§f得分条件：§r情况玩家需快速反应，反应越快，方块破坏的就越多，挖掉的越多得分越高";
-
-                break;
-            case "KeepStanding":
-                rule = "    §l§f游戏玩法：§r玩家需在高地中保持站立，玩家可使用手中木棒来击退其他玩家。\n" +
-                        "    §l§f得分条件：§r在高地中站立得越久，得分越高。";
-                break;
-            case "KeepStanding_2":
-                rule = "    §l§f游戏玩法：§r玩家使用手中木棒来击退其他玩家,使其他玩家击退至虚空\n" +
-                        "    §l§f得分条件：§r存活得越久，得分越高。";
-                break;
-            case "SnowballWar":
-                rule = "    §l§f游戏玩法：§r玩家需挖取雪块来获得雪球，并投掷其他玩家。玩家若被击中，直接淘汰。\n玩家不需要去拾取雪球，获得的雪球直接发送至背包，且被挖的雪块不会被破坏。（实质就是雪球大战）\n" +
-                        "    §l§f得分条件：§r存活得越久，得分越高。";
-                break;
-            case "SnowballWar_2":
-                rule = "    §l§f游戏玩法：§r本体：掘战游戏（掘一死战），玩家需用铲子挖雪块,来使玩家掉落至虚空。\n" +
-                        "    §l§f得分条件：§r存活得越久，得分越高。";
-                break;
-            case "Parkour":
-                rule = "    §l§f游戏玩法：§r跑酷，不用多介绍了吧！\n" +
-                        "    §l§f得分条件：§r到达终点越快得分越高。";
-                break;
-            case "MineRun":
-                rule = "    §l§f游戏玩法：§r玩家在行走中不能踩到地雷《即为石制压力板》，踩到则游戏失败，传送至开始点重新开始。\n" +
-                        "    §l§f得分条件：§r到达终点越快得分越高。";
-                break;
-            case "OreRace":
-                rule = "    §l§f游戏玩法：§r三维收集矿物，场地为xyz的空间\n" +
-                        "    §l§f得分条件：§r玩家需收集矿物来得分，收集矿物越多得分越高，矿物越稀有得分越高。";
-                break;
-            case "OreRace_2":
-                rule = "    §f§l游戏玩法：§r二维收集矿物，场地为xy的空间，并及时提交收集到的物品\n" +
-                        "    §l§f得分条件：§r玩家需收集矿物来得分，收集矿物越多得分越高，矿物越稀有得分越高。\n§c请在游戏结束前，§a点击出发地的钻石§c块完成提交，只有提交的玩家才有得分";
-                break;
-            case "BeFast_3":
-                rule = "    §l§f游戏玩法：§r玩家需用手中的方块快速搭桥至终点区，玩家可攻击他人，使他人踏入虚空重新进行游戏。\n" +
-                        "    §l§f得分条件：§r到达终点越快得分越高。";
-                break;
-            case "BeFast_4":
-                rule = "    游戏玩法&§l§f得分条件：§r玩家需挖取矿石需要用同物质的镐子挖，如铁矿石要用铁镐挖，钻石矿要用钻石镐挖等";
-                break;
-            case "Weeding":
-                rule = "    §l§f游戏玩法：§r除草，玩家需快速挖掉杂草方块。\n" +
-                        "    §l§f得分条件：§r挖掉越多者得分越高。";
-                break;
-            case "MakeItem":
-                rule = "    §l§f游戏玩法：§r按照目标物品，并自行获得原料，最后制作目标物品\n" +
-                        "    §l§f得分条件：§r制作目标物品越快得分越高。";
-                break;
-            case "WatchingFeet":
-                rule = "    §l§f游戏玩法：§rTNTRUN 保持行走，不要跌落\n" +
-                        "    §l§f得分条件：§r存活得越久得分越高";
-                break;
-            case "FallingRun":
-                rule = "    §l§f游戏玩法：§r塌方跑酷 小心，不要被高空生成的方块砸到\n" +
-                        "    §l§f得分条件：§r存活得越久得分越高";
-                break;
-            case "TrafficLight":
-                rule = "    §l§f游戏玩法：§r玩家需注意手中的方块颜色变化，绿色羊毛为绿灯，黄色为黄灯，红色为红灯。\n绿灯，黄灯可行走，若红灯还在行走，则游戏失败，传送至开始点重新开始。\n" +
-                        "    §l§f得分条件：§r到达终点越快得分越高，奖励也越丰富。\n" +
-                        "    §c§l##提醒：黄灯时要停止一切动作";
-                break;
-            case "RedAlert":
-                rule = "    §l§f游戏玩法：§r游戏场地中的方块会按照 [白->黄->橙->红->消失] 变化，玩家须尽可能的让自己不向下掉落\n" +
-                        "    §l§f得分条件：§r存活得越久得分越高";
-                break;
-            case "SnowSlide":
-                rule = "    §l§f游戏玩法：§r不惜一切代价！不要被雪球砸到！及时躲避天上掉下来的雪球！\n" +
-                        "    §l§f得分条件：§r存活得越久得分越高";
-                break;
-            case "AvoidPoison":
-                rule = "    §l§f游戏玩法：§r不要被天上掉下来的药水砸到！及时使用你的治疗药水，注意治疗药水是有限的哦！\n" +
-                        "    §l§f得分条件：§r存活得越久得分越高";
-                break;
-            case "CollectOre":
-                rule = "    §l§f游戏玩法：§r天上掉馅饼啦！快去收集掉下来的矿石吧！\n" +
-                        "    §l§f得分条件：§r矿石越稀有得分越高";
-                break;
-            case "HelpHen":
-                rule = "    §l§f游戏玩法：§rSTEVE的母鸡正在下蛋，请帮助母鸡接下她生的蛋吧！\n" +
-                        "    §l§f得分条件：§r收集的蛋越多得分越高";
-                break;
-            case "HuntingDiamond":
-                rule = "    §l§f游戏玩法：§r地图中藏了一些稀有的钻石，请把它找出来吧！（钻石是以掉落物的形式）\n" +
-                        "    §l§f得分条件：§r收集钻石越快得分越高";
-                break;
-            default:
-                rule = "";
-                break;
+        StringBuilder rules = new StringBuilder();
+        for (String rule : plugin.config.getStringList(gameType)) {
+            rules.append(rule).append("\n");
         }
-        return rule;
+        return rules.toString();
     }
 }

@@ -4,25 +4,25 @@ package net.createlight.champrin.simplegame.schedule;
 import cn.nukkit.Player;
 import cn.nukkit.scheduler.Task;
 import net.createlight.champrin.simplegame.Room;
-import net.createlight.champrin.simplegame.games2.Games;
 
 
-public class RoomSchedule_2 extends Task {
+public class RoomSchedule_1 extends Task {
 
-    private int startTime;
+    private int mainTime;
+    private int gameTime, startTime;
     private Room room;
-    private Games game;
     private String tip;
     private String waiting_tip;
 
-    public RoomSchedule_2(Room room, Games game) {
+    public RoomSchedule_1(Room room) {
         this.room = room;
         this.startTime = (int) room.data.get("startTime");
-        this.game = game;
+        this.mainTime = (int) room.data.get("gameTime");
+        this.gameTime = mainTime;
 
         this.waiting_tip = room.plugin.config.getString("waiting-tip");
         StringBuilder tip = new StringBuilder();
-        for (String string : room.plugin.config.getStringList("gaming-tip-2")) {
+        for (String string : room.plugin.config.getStringList("gaming-tip-1")) {
             tip.append(string).append("\n");
         }
         this.tip = tip.toString();
@@ -31,8 +31,8 @@ public class RoomSchedule_2 extends Task {
     @Override
     public void onRun(int tick) {
         if (room.game == 0) {
-            if (game.gameTime != game.mainTime) {
-                this.game.gameTime = game.mainTime;
+            if (this.gameTime != mainTime) {
+                this.gameTime = mainTime;
             }
             if (room.waitPlayer.size() < room.getMinPlayers()) {
                 this.startTime = (int) room.data.get("startTime");
@@ -59,34 +59,13 @@ public class RoomSchedule_2 extends Task {
         }
 
         if (room.game == 1) {
-            this.game.gameTime = game.gameTime - 1;
+            this.gameTime = gameTime - 1;
             for (Player p : room.gamePlayer) {
-                p.sendTip(tip.replaceAll("%GAMETYPE%", room.gameType).replaceAll("%PLAYERS%", String.valueOf(room.gamePlayer.size())).replaceAll("%REMAINTIME%", String.valueOf(game.gameTime)));
+                p.sendTip(tip.replaceAll("%GAMETYPE%",room.gameType).replaceAll("%POINTS%", String.valueOf(room.rank.get(p.getName()))).replaceAll("%REMAINTIME%", String.valueOf(gameTime)));
             }
-            if (room.gamePlayer.size() <= 1 || game.gameTime <= 0) {
-                this.game.gameTime = game.mainTime;
+            if (room.gamePlayer.size() <= 1 || this.gameTime <= 0) {
+                this.gameTime = mainTime;
                 room.stopGame();
-            }
-            if (game.gameTime >= game.mainTime * 0.8) {
-                game.eachTick();
-            } else if (game.gameTime < game.mainTime * 0.8 && game.gameTime >= game.mainTime * 0.6) {
-                game.eachTick();
-                game.eachTick();
-            } else if (game.gameTime < game.mainTime * 0.6 && game.gameTime >= game.mainTime * 0.4) {
-                game.eachTick();
-                game.eachTick();
-                game.eachTick();
-            } else if (game.gameTime < game.mainTime * 0.4 && game.gameTime >= game.mainTime * 0.2) {
-                game.eachTick();
-                game.eachTick();
-                game.eachTick();
-                game.eachTick();
-            } else if (game.gameTime < game.mainTime * 0.2) {
-                game.eachTick();
-                game.eachTick();
-                game.eachTick();
-                game.eachTick();
-                game.eachTick();
             }
         }
 

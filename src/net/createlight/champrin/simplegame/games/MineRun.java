@@ -11,11 +11,15 @@ import net.createlight.champrin.simplegame.Room;
 
 public class MineRun extends Games implements Listener {
 
+    private String stepping_on_mine;
+
     public MineRun(Room room) {
         super(room);
+        this.stepping_on_mine = room.plugin.config.getString("stepping-on-mine");
     }
 
-    @EventHandler(priority = EventPriority.MONITOR) @SuppressWarnings("unused")
+    @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onMove(PlayerMoveEvent event) {
         if (room.gameType.equals("MineRun")) {
             Player player = event.getPlayer();
@@ -24,9 +28,8 @@ public class MineRun extends Games implements Listener {
                 if (level.getBlock(player.floor().subtract(0, 1)).getId() == Block.PLANKS)//木板
                 {
                     gameFinish(player);
-                }
-                else if (level.getBlock(player.floor()).getId() == Block.STONE_PRESSURE_PLATE) {
-                    player.sendMessage("§c 你踩中了地雷！重新开始吧！");
+                } else if (level.getBlock(player.floor()).getId() == Block.STONE_PRESSURE_PLATE) {
+                    player.sendMessage(stepping_on_mine);
                     player.teleport(room.getRandPos(2));
                 }
             }

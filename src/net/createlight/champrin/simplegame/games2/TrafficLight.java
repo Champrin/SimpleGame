@@ -19,6 +19,7 @@ public class TrafficLight extends Games implements Listener {
     private int r, g, y;
     private String type = "g";
     private int rt = 0, gt = 0, yt = 0;
+    private String rc=room.plugin.config.getString("item-red-customName") ,gc=room.plugin.config.getString("item-green-customName"),yc=room.plugin.config.getString("item-yellow-customName");
 
     public TrafficLight(Room room) {
         super(room);
@@ -37,7 +38,7 @@ public class TrafficLight extends Games implements Listener {
                 int blockId = level.getBlock(player.floor().subtract(0, 1)).getId();
                 Item hand = player.getInventory().getItemInHand();
                 if (blockId != Block.IRON_BLOCK) {
-                    if (hand.getId() == 35 && hand.getDamage() == 14) {
+                    if ((hand.getId() == 35 && hand.getDamage() == 14) || hand.getId() != 35) {
                         player.sendTitle("§c  红灯亮起时不能行走！！！", "§e重新开始吧！", 2, 20 * 2, 2);
                         player.teleport(room.getRandPos(2));
                     }
@@ -51,7 +52,8 @@ public class TrafficLight extends Games implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR) @SuppressWarnings("unused")
+    @EventHandler(priority = EventPriority.MONITOR)
+    @SuppressWarnings("unused")
     public void onPickup(EntityInventoryChangeEvent event) {
         if (room.gameType.equals("TrafficLight")) {
             if (event.getEntity() instanceof Player) {
@@ -70,7 +72,7 @@ public class TrafficLight extends Games implements Listener {
             case "r":
                 this.rt++;
                 if (this.rt == this.r) {
-                    this.giveLight(5, "§a绿灯");
+                    this.giveLight(5, gc);
                     this.type = "g";
                     this.rt = 0;
                     this.r = new Random().nextInt(3) + 1;
@@ -79,7 +81,7 @@ public class TrafficLight extends Games implements Listener {
             case "g":
                 this.gt++;
                 if (this.gt == this.g) {
-                    this.giveLight(4, "§e黄灯");
+                    this.giveLight(4, yc);
                     this.type = "y";
                     this.gt = 0;
                     this.g = new Random().nextInt(4) + 3;
@@ -88,7 +90,7 @@ public class TrafficLight extends Games implements Listener {
             case "y":
                 this.yt++;
                 if (this.yt == this.y) {
-                    this.giveLight(14, "§c红灯");
+                    this.giveLight(14, rc);
                     this.type = "r";
                     this.yt = 0;
                     this.y = new Random().nextInt(3) + 2;

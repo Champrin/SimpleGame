@@ -18,10 +18,19 @@ import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
 import net.createlight.champrin.simplegame.Room;
 
+import java.util.Random;
+
 public class HuntingDiamond extends Games implements Listener {
+
+    private String item_nameTag;
+    private int maxPlayers = (int) room.data.get("maxPlayers");
+    private String tip;
 
     public HuntingDiamond(Room room) {
         super(room);
+        this.item_nameTag = room.plugin.config.getString("HuntingDiamond-item-nameTag");
+        this.eachTick = new Random().nextInt(mainTime / maxPlayers) + 1;
+        this.tip = room.plugin.config.getString("HuntingDiamond-tip");
     }
 
     //关闭清除掉落物
@@ -61,20 +70,24 @@ public class HuntingDiamond extends Games implements Listener {
         }
     }
 
+    private int eachTick;
+
     @Override
     public void eachTick() {
-        if (room.gamePlayer.size() == 0) return;
-        int eachTick = mainTime / (int) room.data.get("maxPlayers");
-        if (gameTime % eachTick == 0) {
-            dropItem();
-        }
         if (gameTime <= 1) {
-            for (Entity entity : level.getEntities()) {
-                if (entity instanceof EntityItem) {
-                    entity.kill();
-                    entity.close();
-                }
-            }
+            room.cleanDrop();
+        }
+        if (room.gamePlayer.size() == 0) {
+            room.cleanDrop();
+            return;
+        }
+        this.eachTick = eachTick - 1;
+        for (Player player : room.gamePlayer) {
+            player.sendPopup(tip.replaceAll("%REMAINTIME%", String.valueOf(eachTick)));
+        }
+        if (eachTick <= 0) {
+            dropItem();
+            this.eachTick = new Random().nextInt(mainTime / maxPlayers) + 1;
         }
     }
 
@@ -88,7 +101,7 @@ public class HuntingDiamond extends Games implements Listener {
 
         EntityItem entity = new EntityItem(new Position(v3.x, v3.y, v3.z, room.level).getChunk(), nbt);
         entity.setDataFlag(0, 48, true);
-        entity.setNameTag("<< Diamond >>");
+        entity.setNameTag(item_nameTag);
         entity.setNameTagVisible(true);
         entity.setNameTagAlwaysVisible(true);
         room.plugin.getServer().getPluginManager().callEvent(new ItemSpawnEvent(entity));

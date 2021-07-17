@@ -20,11 +20,13 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class CollectOre extends Games implements Listener {
-//TODO 清理未收集的ORE
+
     private ArrayList<Integer> oreId = new ArrayList<>(Arrays.asList(Item.DIAMOND, Item.EMERALD, Item.GOLD_INGOT, Item.COAL, Item.IRON_INGOT, Item.REDSTONE));
+    private String item_nameTag;
 
     public CollectOre(Room room) {
         super(room);
+        this.item_nameTag = room.plugin.config.getString("CollectOre-item-nameTag");
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -54,21 +56,19 @@ public class CollectOre extends Games implements Listener {
 
     @Override
     public void eachTick() {
-        if (room.gamePlayer.size() == 0) return;
-        dropItem();
-        dropItem();
-        dropItem();
-        dropItem();
-        dropItem();
-        dropItem();
-        if (gameTime <= 1){
-            for (Entity entity : level.getEntities()) {
-                if (entity instanceof EntityItem) {
-                    entity.kill();
-                    entity.close();
-                }
-            }
+        if (gameTime <= 1) {
+            room.cleanDrop();
         }
+        if (room.gamePlayer.size() == 0) {
+            room.cleanDrop();
+            return;
+        }
+        dropItem();
+        dropItem();
+        dropItem();
+        dropItem();
+        dropItem();
+        dropItem();
     }
 
     private void dropItem() {
@@ -80,14 +80,15 @@ public class CollectOre extends Games implements Listener {
         nbt.putCompound("Item", NBTIO.putItemHelper(Item.get(id, 0), -1));
         nbt.putShort("PickupDelay", 10);
 
-        EntityItem entity = new EntityItem(new Position(v3.x,v3.y,v3.z,room.level).getChunk(), nbt);
+        EntityItem entity = new EntityItem(new Position(v3.x, v3.y, v3.z, room.level).getChunk(), nbt);
         entity.setDataFlag(0, 48, true);
-        entity.setNameTag("<< Ore >>");
+        entity.setNameTag(item_nameTag);
         entity.setNameTagVisible(true);
         entity.setNameTagAlwaysVisible(true);
         room.plugin.getServer().getPluginManager().callEvent(new ItemSpawnEvent(entity));
         entity.spawnToAll();
     }
+
     @Override
     public void madeArena() {
 

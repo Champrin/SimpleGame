@@ -1,1 +1,179 @@
+#只能填默认给的信息替代符，默认中没有的标识不能填
+#PS：如'player-nameTag:[PLAYER] §f%PLAYER%'中有%PLAYER%，那么你改的信息中只能使用%PLAYER%，不能用下面出现的%RANK%等等
+#默认信息中格式为列表的信息是自动换行的，只换行一次.如果你想要多行可以自行加'\n'换行符
 
+
+#在SimpleGame游戏中的玩家的nameTag
+#PS：当游戏停止后，系统会自动的改为原来的nameTag
+#%PLAYER%用作代替玩家名字
+player-nameTag: "[PLAYER] §f%PLAYER%"
+
+#在SimpleGame游戏中的玩家 聊天信息格式
+#%PLAYER%用作代替玩家名字 %MSG%用作代替玩家发送的信息
+room-chat-tag: "%PLAYER%§e§l>§r %MSG%"
+
+#玩家加入一个房间时，发送的信息
+join-game-PlayerHasJoined: ">>  你已经加入一个房间了,请在聊天栏输入“@hub”重试"
+join-game-RoomFull: ">>  房间已满"
+join-game-RoomHasStarted: ">>  房间已开始"
+join-game-Succeed: ">  §a%PLAYER%§f加入了房间"
+join-game-TipAboutHowToQuit: "§c若想退出游戏请输入 @hub"
+
+#玩家退出房间或退出正在进行的游戏时，发送的信息
+quit-game-room: ">  §a%PLAYER%§f离开了房间"
+quit-game-player: "§c>  §f你已退出游戏！"
+
+#玩家进入观战模式时，发送的信息
+#PS：当玩家游戏失败或完成时会进入gamemode3即观战模式 后续推出其他玩家可观看
+view-game: ">> 你进入观战模式"
+
+#玩家完成游戏时，发送的信息
+finish-game-person-1: "§a 你完成游戏了！！！"
+# %RANK% 用作代替玩家是第几个完成的
+finish-game-person-2: "§d  你是第§c%RANK%§d个完成的！"
+# %PLAYER% 用作代替玩家名字
+finish-game-room: "%PLAYER%§a完成了游戏"
+#提示玩家等待别的玩家，若退出游戏不会有成绩
+finish-game-tip-1: "§e  先已将你切换成观战模式，耐心的等待别人完成比赛吧！"
+finish-game-tip-2: "§e  若退出将不会记录成绩！"
+
+#玩家胜利时，发送的信息
+#PS：用于存活类游戏，剩下最后一人时
+succeed-game-person: ">> §e你活到了最后！"
+succeed-game-room: "%PLAYER%§e活到了最后！"
+
+#玩家游戏失败时，发送的信息
+fail-game-person: ">> §c你游戏失败了！"
+fail-game-room: "%PLAYER%§c游戏失败了"
+fail-game-tip: ">> §e耐心的等待别人完成比赛吧！"
+
+#游戏结束时，给各个玩家发送的总排名信息以及个人排名信息
+# %PLAYER% 用作代替玩家名字 %RANK%玩家的排名 %POINTS%玩家的分数
+all-rank: "%RANK% %PLAYER% 分数: %POINTS%"
+person-rank: "§a你的排名: §e[%RANK%] §a你的分数: §e[%POINTS%]"
+
+#相关物品的名称，即手持某物品的TIP
+quit-game-item: "§c退出游戏"
+game-rule-item: "§a游戏介绍"
+
+#在某些游戏时，可能会发送的信息
+#MakeItem
+item-repeat-make: "§a  重复做这个物品是不加分的哟~"
+#MineRun
+stepping-on-mine: "§c 你踩中了地雷！重新开始吧！"
+
+#在某些游戏时，需要给物品标识展示名
+#CollectOre
+#PS：当矿物生成时，会有名字‘<< Ore >>’显示
+CollectOre-item-nameTag: "<< Ore >>"
+#CollectOre
+HuntingDiamond-item-nameTag: "<< Diamond >>"
+#TrafficLight
+#PS：如当玩家手持羊毛时，会有一个‘§c红灯’的显示
+item-green-customName: "§a绿灯"
+item-yellow-customName: "§e黄灯"
+item-red-customName: "§c红灯"
+
+#玩家进入房间时，人数未达到最小值时发出的信息提示
+waiting-tip: "§f> §l等待其他玩家加入...<"
+
+#房间人数达到最小值,进入开始游戏倒计时
+#%TIME% 用于代替还剩多少时间开始游戏
+countdown-to-start-game: "§6%TIME%\n§e游戏即将开始..."
+
+#在游戏过程的信息显示
+HuntingDiamond-tip: "§f下一颗钻石被发现还有 §c§l%REMAINTIME%§r§f 秒"
+SnowSlide-tip:
+  - "§e§l==§f雪崩!§e=="
+  - "§a回合: §b§f%ROUND%"
+  - "§e剩余玩家: §f%PLAYERS%"
+SnowSlide-round-remain-time: "§e本回合剩余§c§l%ROUNDTIME%§r§e秒"
+SnowSlide-round-remain-players: "§a本轮剩余§c§l%PLAYERS%§r§e名玩家"
+SnowSlide-new-round-title: "§f第§c§l%ROUND%§r回合"
+gaming-tip-1:
+  - "§e§l==§f%GAMETYPE%§e=="
+  - "§e你的得分: §f%POINTS%"
+  - "§d时间剩余: §b%REMAINTIME%"
+gaming-tip-2:
+  - "§e§l==§f%GAMETYPE%§e=="
+  - "§e剩余玩家: §f%PLAYERS%"
+  - "§d时间剩余: §b%REMAINTIME%"
+
+#游戏介绍
+#PS：当玩家右击game rule的物品时，会弹出游戏介绍的GUI的信息
+#%GAMETYPE% 用作代替游戏类型
+game-rule-title: "%GAMETYPE%§6游戏玩法介绍"
+BeFast_1:
+  - "    §r§l§f游戏玩法：§r在游戏区域内，隐藏了钻石矿，玩家需找到它并挖掉，视为完成游戏。"
+  - "玩家要在木头石头泥土等等中，找到钻石矿，完成游戏。"
+  - "    §l§f得分条件：§r完成游戏越快得分越高。"
+BeFast_2:
+  - "    §l§f游戏玩法：§r玩家需正确使用工具来挖除方块，如斧子是用来挖木头类，镐子是用来挖石头类等"
+  - "    §l§f得分条件：§r情况玩家需快速反应，反应越快，方块破坏的就越多，挖掉的越多得分越高"
+KeepStanding:
+  - "    §l§f游戏玩法：§r玩家需在高地中保持站立，玩家可击退其他玩家。"
+  - "    §l§f得分条件：§r在高地中站立得越久，得分越高。"
+KeepStanding_2:
+  - "    §l§f游戏玩法：§r玩家可击退其他玩家,使其他玩家击退至虚空"
+  - "    §l§f得分条件：§r存活得越久，得分越高。"
+SnowballWar:
+  - "    §l§f游戏玩法：§r玩家需挖取雪块来获得雪球，并投掷其他玩家。玩家若被击中，直接淘汰。"
+  - "玩家不需要去拾取雪球，获得的雪球直接发送至背包，且被挖的雪块不会被破坏。（实质就是雪球大战）"
+  - "    §l§f得分条件：§r存活得越久，得分越高。"
+SnowballWar_2:
+  - "    §l§f游戏玩法：§r本体：掘战游戏（掘一死战），玩家需用铲子挖雪块,来使玩家掉落至虚空。"
+  - "    §l§f得分条件：§r存活得越久，得分越高。"
+Parkour:
+  - "    §l§f游戏玩法：§r跑酷，不用多介绍了吧！"
+  - "    §l§f得分条件：§r到达终点越快得分越高。"
+MineRun:
+  - "    §l§f游戏玩法：§r玩家在行走中不能踩到地雷《即为石制压力板》，踩到则游戏失败，传送至开始点重新开始。"
+  - "    §l§f得分条件：§r到达终点越快得分越高。"
+OreRace:
+  - "    §l§f游戏玩法：§r三维收集矿物，场地为xyz的空间"
+  - "    §l§f得分条件：§r玩家需收集矿物来得分，收集矿物越多得分越高，矿物越稀有得分越高。"
+OreRace_2:
+  - "    §f§l游戏玩法：§r二维收集矿物，场地为xy的空间，并及时提交收集到的物品"
+  - "    §l§f得分条件：§r玩家需收集矿物来得分，收集矿物越多得分越高，矿物越稀有得分越高。"
+  - "§c请在游戏结束前，§a点击出发地的钻石§c块完成提交，只有提交的玩家才有得分"
+BeFast_3:
+  - "    §l§f游戏玩法：§r玩家需用手中的方块快速搭桥至终点区，玩家可攻击他人，使他人踏入虚空重新进行游戏。"
+  - "    §l§f得分条件：§r到达终点越快得分越高。"
+BeFast_4:
+  - "    §l§f游戏玩法：§r玩家需挖取矿石需要用同物质的镐子挖，如铁矿石要用铁镐挖，钻石矿要用钻石镐挖等"
+  - "    §l§f得分条件：§r挖的越快得分越高。"
+Weeding:
+  - "    §l§f游戏玩法：§r除草，玩家需快速挖掉杂草方块。"
+  - "    §l§f得分条件：§r挖掉越多者得分越高。"
+MakeItem:
+  - "    §l§f游戏玩法：§r按照目标物品，并自行获得原料，最后制作目标物品"
+  - "    §l§f得分条件：§r制作目标物品越快得分越高。"
+WatchingFeet:
+  - "    §l§f游戏玩法：§rTNTRUN 保持行走，不要跌落"
+  - "    §l§f得分条件：§r存活得越久得分越高"
+FallingRun:
+  - "    §l§f游戏玩法：§r塌方跑酷 小心，不要被高空生成的方块砸到"
+  - "    §l§f得分条件：§r存活得越久得分越高"
+TrafficLight:
+  - "    §l§f游戏玩法：§r玩家需注意手中的方块颜色变化，绿色羊毛为绿灯，黄色为黄灯，红色为红灯。"
+  - "绿灯，黄灯可行走，若红灯还在行走，则游戏失败，传送至开始点重新开始。"
+  - "    §l§f得分条件：§r到达终点越快得分越高，奖励也越丰富。"
+  - "    §c§l##提醒：黄灯时要停止一切动作"
+RedAlert:
+  - "    §l§f游戏玩法：§r游戏场地中的方块会按照 [白->黄->橙->红->消失] 变化，玩家须尽可能的让自己不向下掉落"
+  - "    §l§f得分条件：§r存活得越久得分越高"
+SnowSlide:
+  - "    §l§f游戏玩法：§r不惜一切代价！不要被雪球砸到！及时躲避天上掉下来的雪球！"
+  - "    §l§f得分条件：§r存活得越久得分越高"
+AvoidPoison:
+  - "    §l§f游戏玩法：§r不要被天上掉下来的药水砸到！及时使用你的治疗药水，注意治疗药水是有限的哦！"
+  - "    §l§f得分条件：§r存活得越久得分越高"
+CollectOre:
+  - "    §l§f游戏玩法：§r天上掉馅饼啦！快去收集掉下来的矿石吧！"
+  - "    §l§f得分条件：§r矿石越稀有得分越高"
+HelpHen:
+  - "    §l§f游戏玩法：§rSTEVE的母鸡正在下蛋，请帮助母鸡接下她生的蛋吧！"
+  - "    §l§f得分条件：§r收集的蛋越多得分越高"
+HuntingDiamond:
+  - "    §l§f游戏玩法：§r地图中藏了一些稀有的钻石，请把它找出来吧！（钻石是以掉落物的形式）"
+  - "    §l§f得分条件：§r收集钻石越快得分越高"

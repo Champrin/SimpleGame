@@ -69,7 +69,7 @@ public class SimpleGame extends PluginBase implements Listener {
     public LinkedHashMap<String, LinkedHashMap<String, String>> setters = new LinkedHashMap<>();
     public LinkedHashMap<Player, Room> gamePlayer = new LinkedHashMap<>(), waitPlayer = new LinkedHashMap<>(), viewPlayer = new LinkedHashMap<>();
 
-    public int OwnPoint, TeamPoint, WinPoint;
+    //public int OwnPoint, TeamPoint, WinPoint;
 
     private static SimpleGame instance;
 
@@ -97,7 +97,7 @@ public class SimpleGame extends PluginBase implements Listener {
     }
 
     public void setConfigData() {
-        if (this.config.get("占领加分") == null) {
+        /*if (this.config.get("占领加分") == null) {
             this.config.set("占领加分", 10);
             this.config.set("团队加分", 2);
             this.config.set("最终胜利加分", 10);
@@ -105,7 +105,8 @@ public class SimpleGame extends PluginBase implements Listener {
         }
         this.OwnPoint = (int) this.config.get("占领加分");
         this.TeamPoint = (int) this.config.get("团队加分");
-        this.WinPoint = (int) this.config.get("最终胜利加分");
+        this.WinPoint = (int) this.config.get("最终胜利加分");*/
+
     }
 
     public String getGameName() {
@@ -165,6 +166,7 @@ public class SimpleGame extends PluginBase implements Listener {
             this.saveResource("config.yml", false);
         }
         this.config = new Config(this.getDataFolder() + "/config.yml", Config.YAML);
+
         if (!new File(this.getDataFolder() + "/player.yml").exists()) {
             this.saveResource("player.yml", false);
         }

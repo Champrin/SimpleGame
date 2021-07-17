@@ -19,10 +19,12 @@ public class MakeItem extends Games implements Listener {
 
     public LinkedHashMap<String, ArrayList<Integer>> project = new LinkedHashMap<>();
     private int type;
+    private String item_repeat_make;
 
     public MakeItem(Room room) {
         super(room);
         this.type = new Random().nextInt(3)+1;
+        this.item_repeat_make = room.plugin.config.getString("item-repeat-make");
     }
 
     public boolean isCraft(String name, int itemId) {
@@ -34,7 +36,7 @@ public class MakeItem extends Games implements Listener {
     public void MakeItem_1(Player player, int item) {
         String name = player.getName();
         if (isCraft(name, item)) {
-            player.sendMessage("§a  重复做这个物品是不加分的哟~");
+            player.sendMessage(item_repeat_make);
             return;
         }
         if (item == Item.BREAD || item == Item.ANVIL || item == Item.FURNACE || item == Item.NOTEBLOCK || item == Item.POWERED_RAIL) {
@@ -48,7 +50,7 @@ public class MakeItem extends Games implements Listener {
     public void MakeItem_2(Player player, int item) {
         String name = player.getName();
         if (isCraft(name, item)) {
-            player.sendMessage("§a  重复做这个物品是不加分的哟~");
+            player.sendMessage(item_repeat_make);
             return;
         }
         if (item == Item.GOLD_SWORD || item == Item.DIAMOND_CHESTPLATE || item == Item.JACK_O_LANTERN || item == Item.PISTON || item == Item.MINECART_WITH_CHEST) {
@@ -62,7 +64,7 @@ public class MakeItem extends Games implements Listener {
     public void MakeItem_3(Player player, int item) {
         String name = player.getName();
         if (isCraft(name, item)) {
-            player.sendMessage("§a  重复做这个物品是不加分的哟~");
+            player.sendMessage(item_repeat_make);
             return;
         }
         if (item == Item.DOOR_BLOCK || item == Item.MINECART_WITH_HOPPER || item == Item.BREAD || item == Item.SHEARS || item == Item.STICKY_PISTON) {

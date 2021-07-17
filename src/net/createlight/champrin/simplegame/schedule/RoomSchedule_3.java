@@ -10,11 +10,14 @@ public class RoomSchedule_3 extends Task {
     private int startTime;
     private Room room;
     private Games game;
+    private String waiting_tip;
 
     public RoomSchedule_3(Room room, Games game) {
         this.room = room;
         this.startTime = (int) room.data.get("startTime");
         this.game = game;
+
+        this.waiting_tip = room.plugin.config.getString("waiting-tip");
     }
 
     @Override
@@ -26,7 +29,7 @@ public class RoomSchedule_3 extends Task {
             if (room.waitPlayer.size() < room.getMinPlayers()) {
                 this.startTime = (int) room.data.get("startTime");
                 for (Player p : room.waitPlayer) {
-                    p.sendPopup("> §r§l等待其他玩家加入...<");
+                    p.sendPopup(waiting_tip);
                 }
             } else if (room.waitPlayer.size() >= room.getMinPlayers()) {
                 this.startTime = startTime - 1;

@@ -2,6 +2,8 @@ package net.createlight.champrin.simplegame.games;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
+import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.item.EntityItem;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
@@ -16,11 +18,13 @@ public abstract class Games {
     public SimpleGame plugin = SimpleGame.getInstance();
 
     public Room room;
+    public Level level;
 
     public Item[] tools;
 
     public Games(Room room) {
         this.room = room;
+        this.level = room.level;
     }
 
     public void giveTools() {
@@ -64,14 +68,14 @@ public abstract class Games {
     public void gameFinish(Player player) {
         if (room.finishPlayer.contains(player)) return;
         if (room.finishPlayer.size() < room.gamePlayer.size()) {
-            player.sendMessage("§a 你完成游戏了！！！");
-            room.arenaMsg(player.getName() + "§e完成了游戏");
+            player.sendMessage(plugin.config.getString("finish-game-person-1"));
+            room.arenaMsg(plugin.config.getString("finish-game-room").replaceAll("%PLAYER%", player.getName()));
             room.addPoint(player, 66 - room.finishPlayer.size());
-            player.sendMessage("§d  你是第§c  " + room.finishPlayer.size() + 1 + " §d个完成的！");
+            player.sendMessage(plugin.config.getString("finish-game-person-2").replaceAll("%RANK%", String.valueOf(room.finishPlayer.size() + 1)));
             room.finishPlayer.add(player);
             room.setToView(player);
-            player.sendMessage("§e  先已将你切换成观战模式，耐心的等待别人完成比赛吧！");
-            player.sendMessage("§e  若退出将不会记录成绩！");
+            player.sendMessage(plugin.config.getString("finish-game-tip-1"));
+            player.sendMessage(plugin.config.getString("finish-game-tip-2"));
         } else {
             room.stopGame();
         }
@@ -80,12 +84,12 @@ public abstract class Games {
     public void gameFail(Player player) {
         if (room.finishPlayer.contains(player)) return;
         if (room.gamePlayer.size() > 1) {
-            player.sendMessage(player.getName() + "§f游戏失败");
-            player.sendMessage(">> §c你游戏失败了！");
+            player.sendMessage(plugin.config.getString("fail-game-person"));
+            room.arenaMsg(plugin.config.getString("fail-game-room").replaceAll("%PLAYER%", player.getName()));
             room.finishPlayer.add(player);
             room.addPoint(player, room.finishPlayer.size());
             room.setToView(player);
-            player.sendMessage(">> §e耐心的等待别人完成比赛吧！");
+            player.sendMessage(plugin.config.getString("fail-game-tip"));
             if (room.gamePlayer.size() <= 1) {
                 gameSucceed(room.gamePlayer.get(0));
             }
@@ -97,8 +101,9 @@ public abstract class Games {
     public void gameSucceed(Player player) {
         if (room.finishPlayer.contains(player)) return;
         room.finishPlayer.add(player);
-        room.addPoint(player, room.finishPlayer.size() + 6);
-        room.arenaMsg(player.getName() + "§e活到了最后！");
+        player.sendMessage(plugin.config.getString("succeed-game-person"));
+        room.arenaMsg(plugin.config.getString("succeed-game-room").replaceAll("%PLAYER%", player.getName()));
+        room.addPoint(player, 66);
         room.stopGame();
     }
 }

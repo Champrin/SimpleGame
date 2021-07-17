@@ -1,6 +1,10 @@
 package net.createlight.champrin.simplegame.schedule;
 
+import net.createlight.champrin.simplegame.SimpleGame;
+
 public class Countdown {
+
+    private String tip = SimpleGame.getInstance().config.getString("countdown-to-start-game");
 
     public String countDown(int number) {
         switch (number) {
@@ -15,7 +19,7 @@ public class Countdown {
             case 1:
                 return getNumber1();
             default:
-                return "§6" + number + "\n§e游戏即将开始...";
+                return tip.replaceAll("%TIME%", String.valueOf(number));
         }
     }
 

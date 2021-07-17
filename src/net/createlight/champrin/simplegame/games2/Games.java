@@ -6,11 +6,9 @@ import net.createlight.champrin.simplegame.Room;
 public abstract class Games extends net.createlight.champrin.simplegame.games.Games {
 
     public int mainTime, gameTime;
-    public Level level;
 
     public Games(Room room) {
         super(room);
-        this.level = room.level;
         this.gameTime = (int) room.data.get("gameTime");
         this.mainTime = gameTime;
     }
