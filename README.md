@@ -2,6 +2,7 @@
 
     Nukkit Simple/Mini Game Map
     
+# The World File is in releases-v1.5.0-default.zip
 
 ## Chinese: https://www.mcbbs.net/thread-1089204-1-1.html
 ## English: https://cloudburstmc.org/resources/nukkit-1-17-x-simplegame.730/
