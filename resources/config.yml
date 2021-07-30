@@ -18,6 +18,8 @@ join-game-RoomFull: ">>  房间已满"
 join-game-RoomHasStarted: ">>  房间已开始"
 join-game-Succeed: ">  §a%PLAYER%§f加入了房间"
 join-game-TipAboutHowToQuit: "§c若想退出游戏请输入 @hub"
+no-room: ">>  没有房间,无法加入"
+no-freeroom: ">>  没有空闲房间,无法加入"
 
 #玩家退出房间或退出正在进行的游戏时，发送的信息
 quit-game-room: ">  §a%PLAYER%§f离开了房间"
@@ -98,6 +100,15 @@ gaming-tip-2:
   - "§e§l==§f%GAMETYPE%§e=="
   - "§e剩余玩家: §f%PLAYERS%"
   - "§d时间剩余: §b%REMAINTIME%"
+
+#加入游戏GUI
+gui-title: "§f§l房间列表"
+random-join: "§l§6>> §6随机加入 §6<<"
+#%ROOMID% %GAMETYPE%
+each-room: "§f房间:§a%ROOMID%§f游戏:§a%GAMETYPE%"
+#%JOINED%  %MAXPLAYER%
+room-state-wait: "§e等待中 §a%JOINED%§f/§a%MAXPLAYER%"
+room-state-start: "§c游戏中"
 
 #游戏介绍
 #PS：当玩家右击game rule的物品时，会弹出游戏介绍的GUI的信息

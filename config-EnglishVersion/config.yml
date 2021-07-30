@@ -19,6 +19,8 @@ join-game-RoomFull: ">>  The room is full."
 join-game-RoomHasStarted: ">>  The room has started."
 join-game-Succeed: ">  §a%PLAYER%§f joined the room"
 join-game-TipAboutHowToQuit: "§cIf you want to quit the game, please enter '@hub'"
+no-room: ">>  No room, can't join"
+no-freeroom: ">>  No free room, unable to join"
 
 #when player quits room or quits game
 #%PLAYER% Use to replace of player's name
@@ -101,7 +103,16 @@ gaming-tip-2:
   - "§e§l==§f%GAMETYPE%§e=="
   - "§eRemaining players: §f%PLAYERS%"
   - "§dRemaining time: §b%REMAINTIME%"
-s
+
+#About join the game GUI
+gui-title: "§f§lRoom list"
+random-join: "§l§6>> §6Random join §6<<"
+#%ROOMID% Use to replace of room id %GAMETYPE% Use to replace of game type
+each-room: "§fRoom:§a%ROOMID%§fGame:§a%GAMETYPE%"
+#%JOINED% Use to replace of the number of people who have joined the game %MAXPLAYER% Use to replace of the number of room max players
+room-state-wait: "§eWaiting §a%JOINED%§f/§a%MAXPLAYER%"
+room-state-start: "§cGaming"
+
 #Introduction to the game
 #PS:When the player right clicks the game rule item, the GUI information of game introduction will pop up
 #%GAMETYPE% Use to replace of game type
